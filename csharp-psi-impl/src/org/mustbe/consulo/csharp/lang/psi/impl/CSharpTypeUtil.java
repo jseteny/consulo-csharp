@@ -83,6 +83,7 @@ public class CSharpTypeUtil
 	public static final InheritResult FAIL = new InheritResult(false, null);
 	public static final InheritResult SIMPLE_SUCCESS = new InheritResult(true, null);
 
+	@Deprecated
 	private static final String[] ourNumberRanks = new String[]{
 			DotNetTypes.System.Byte,
 			DotNetTypes.System.SByte,
@@ -142,6 +143,7 @@ public class CSharpTypeUtil
 		return true;
 	}
 
+	@Deprecated
 	public static int getNumberRank(DotNetTypeRef typeRef, PsiElement scope)
 	{
 		PsiElement element = typeRef.resolve(scope).getElement();
@@ -272,17 +274,6 @@ public class CSharpTypeUtil
 		if(target instanceof CSharpChameleonTypeRef)
 		{
 			target = ((CSharpChameleonTypeRef) target).doMirror(top, scope);
-		}
-
-		int topRank = getNumberRank(top, scope);
-		int targetRank = getNumberRank(target, scope);
-
-		if(topRank != -1 && targetRank != -1)
-		{
-			if(targetRank <= topRank)
-			{
-				return SIMPLE_SUCCESS;
-			}
 		}
 
 		if(target instanceof CSharpRefTypeRef && top instanceof CSharpRefTypeRef)

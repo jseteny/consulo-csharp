@@ -887,6 +887,10 @@
 			<parameter/>
 			<parameter/>
 		</operator>
+
+		<operator name="IMPLICIT_KEYWORD">
+			<parameter type="System.Int32"/>
+		</operator>
 	</type>
 
 	<type name="System.Double">
