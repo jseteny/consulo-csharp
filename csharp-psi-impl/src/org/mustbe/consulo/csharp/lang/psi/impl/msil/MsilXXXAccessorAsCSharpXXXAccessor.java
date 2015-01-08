@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.csharp.lang.psi.CSharpElementVisitor;
+import org.mustbe.consulo.csharp.lang.psi.msil.MsilToCSharpManager;
 import org.mustbe.consulo.dotnet.psi.DotNetModifier;
 import org.mustbe.consulo.dotnet.psi.DotNetModifierList;
 import org.mustbe.consulo.dotnet.psi.DotNetXXXAccessor;
@@ -36,13 +37,14 @@ public class MsilXXXAccessorAsCSharpXXXAccessor extends MsilElementWrapper<DotNe
 	private final PsiElement myParent;
 	private final MsilModifierListToCSharpModifierList myModifierList;
 
-	public MsilXXXAccessorAsCSharpXXXAccessor(@NotNull PsiElement parent,
+	public MsilXXXAccessorAsCSharpXXXAccessor(@NotNull MsilToCSharpManager manager,
+			@NotNull PsiElement parent,
 			@NotNull DotNetXXXAccessor original,
 			@NotNull MsilMethodEntry resolvedMethod)
 	{
-		super(parent, original);
+		super(manager, parent, original);
 		myParent = parent;
-		myModifierList = new MsilModifierListToCSharpModifierList(this, resolvedMethod.getModifierList());
+		myModifierList = new MsilModifierListToCSharpModifierList(manager, this, resolvedMethod.getModifierList());
 	}
 
 	@Override

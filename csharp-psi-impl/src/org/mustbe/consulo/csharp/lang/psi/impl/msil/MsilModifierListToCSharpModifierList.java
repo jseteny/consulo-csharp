@@ -31,6 +31,7 @@ import org.mustbe.consulo.csharp.lang.psi.impl.DotNetTypes2;
 import org.mustbe.consulo.csharp.lang.psi.impl.light.CSharpLightAttributeBuilder;
 import org.mustbe.consulo.csharp.lang.psi.impl.light.CSharpLightAttributeWithSelfTypeBuilder;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.CSharpModifierListImplUtil;
+import org.mustbe.consulo.csharp.lang.psi.msil.MsilToCSharpManager;
 import org.mustbe.consulo.dotnet.DotNetTypes;
 import org.mustbe.consulo.dotnet.externalAttributes.ExternalAttributeArgumentNode;
 import org.mustbe.consulo.dotnet.externalAttributes.ExternalAttributeHolder;
@@ -60,16 +61,19 @@ public class MsilModifierListToCSharpModifierList extends MsilElementWrapper<Dot
 	private final CSharpModifier[] myAdditional;
 	private List<DotNetAttribute> myAdditionalAttributes = Collections.emptyList();
 
-	public MsilModifierListToCSharpModifierList(@NotNull PsiElement parent, @NotNull DotNetModifierList modifierList)
-	{
-		this(CSharpModifier.EMPTY_ARRAY, parent, modifierList);
-	}
-
-	public MsilModifierListToCSharpModifierList(@NotNull CSharpModifier[] additional,
+	public MsilModifierListToCSharpModifierList(@NotNull MsilToCSharpManager manager,
 			@NotNull PsiElement parent,
 			@NotNull DotNetModifierList modifierList)
 	{
-		super(parent, modifierList);
+		this(manager, CSharpModifier.EMPTY_ARRAY, parent, modifierList);
+	}
+
+	public MsilModifierListToCSharpModifierList(@NotNull MsilToCSharpManager manager,
+			@NotNull CSharpModifier[] additional,
+			@NotNull PsiElement parent,
+			@NotNull DotNetModifierList modifierList)
+	{
+		super(manager, parent, modifierList);
 		myAdditional = additional;
 		myModifierList = modifierList;
 

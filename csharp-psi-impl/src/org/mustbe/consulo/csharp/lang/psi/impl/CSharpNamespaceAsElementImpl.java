@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.mustbe.consulo.csharp.lang.CSharpLanguage;
 import org.mustbe.consulo.dotnet.lang.psi.impl.IndexBasedDotNetNamespaceAsElement;
 import org.mustbe.consulo.dotnet.resolve.impl.IndexBasedDotNetPsiSearcher;
-import com.intellij.openapi.project.Project;
+import com.intellij.openapi.module.Module;
 
 /**
  * @author VISTALL
@@ -12,11 +12,11 @@ import com.intellij.openapi.project.Project;
  */
 public class CSharpNamespaceAsElementImpl extends IndexBasedDotNetNamespaceAsElement
 {
-	public CSharpNamespaceAsElementImpl(@NotNull Project project,
+	public CSharpNamespaceAsElementImpl(@NotNull Module module,
 			@NotNull String indexKey,
 			@NotNull String qName,
 			@NotNull IndexBasedDotNetPsiSearcher searcher)
 	{
-		super(project, CSharpLanguage.INSTANCE, indexKey, qName, searcher);
+		super(module, CSharpLanguage.INSTANCE, indexKey, qName, searcher);
 	}
 }

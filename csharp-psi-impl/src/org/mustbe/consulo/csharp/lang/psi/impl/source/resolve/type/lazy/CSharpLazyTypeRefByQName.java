@@ -2,7 +2,6 @@ package org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.type.lazy;
 
 import org.consulo.lombok.annotations.LazyInstance;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.type.CSharpTypeRefByQName;
 import org.mustbe.consulo.dotnet.resolve.DotNetTypeResolveResult;
 import com.intellij.psi.PsiElement;
@@ -18,12 +17,6 @@ public class CSharpLazyTypeRefByQName extends CSharpTypeRefByQName
 	public CSharpLazyTypeRefByQName(PsiElement scope, @NotNull String qualifiedName)
 	{
 		super(qualifiedName);
-		myScope = scope;
-	}
-
-	public CSharpLazyTypeRefByQName(PsiElement scope, @NotNull String qualifiedName, @Nullable Boolean nullable)
-	{
-		super(qualifiedName, nullable);
 		myScope = scope;
 	}
 

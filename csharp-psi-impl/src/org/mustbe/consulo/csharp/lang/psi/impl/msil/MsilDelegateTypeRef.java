@@ -32,27 +32,22 @@ import com.intellij.psi.PsiElement;
  */
 public class MsilDelegateTypeRef extends DotNetTypeRef.Delegate
 {
+	private final MsilToCSharpManagerImpl myMsilToCSharpManager;
 	@NotNull
 	private final PsiElement myScope;
-	private final Boolean myNullability;
 
-	public MsilDelegateTypeRef(@NotNull PsiElement scope, @NotNull DotNetTypeRef typeRef, @Nullable Boolean nullability)
+	public MsilDelegateTypeRef(MsilToCSharpManagerImpl msilToCSharpManager, @NotNull PsiElement scope, @NotNull DotNetTypeRef typeRef)
 	{
 		super(typeRef);
+		myMsilToCSharpManager = msilToCSharpManager;
 		myScope = scope;
-		myNullability = nullability;
 	}
 
 	@NotNull
 	@Override
 	public String getPresentableText()
 	{
-		String s = MsilHelper.cutGenericMarker(super.getPresentableText());
-		if(myNullability == Boolean.TRUE)
-		{
-			s += "?";
-		}
-		return s;
+		return MsilHelper.cutGenericMarker(super.getPresentableText());
 	}
 
 	@NotNull
@@ -86,7 +81,7 @@ public class MsilDelegateTypeRef extends DotNetTypeRef.Delegate
 				{
 					return null;
 				}
-				return MsilToCSharpUtil.wrap(cachedResult.getElement());
+				return myMsilToCSharpManager.wrap(cachedResult.getElement());
 			}
 
 			@NotNull
@@ -99,7 +94,7 @@ public class MsilDelegateTypeRef extends DotNetTypeRef.Delegate
 			@Override
 			public boolean isNullable()
 			{
-				return myNullability == Boolean.TRUE || CSharpTypeUtil.isElementIsNullable(getElement());
+				return CSharpTypeUtil.isElementIsNullable(getElement());
 			}
 		};
 	}

@@ -18,7 +18,8 @@ package org.mustbe.consulo.csharp.lang.psi.impl.source;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.csharp.lang.psi.impl.msil.CSharpTransform;
+import org.mustbe.consulo.csharp.lang.psi.CSharpDelegateMethodDeclaration;
+import org.mustbe.consulo.csharp.lang.psi.impl.msil.CSharpTransformer;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.type.CSharpTypeRefByQName;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.util.CSharpMethodImplUtil;
 import org.mustbe.consulo.dotnet.DotNetTypes;
@@ -163,8 +164,8 @@ public class CSharpTypeDeclarationImplUtil
 		String defaultSuperType = getDefaultSuperType(typeDeclaration);
 		if(defaultSuperType != null)
 		{
-			DotNetTypeDeclaration type = DotNetPsiSearcher.getInstance(typeDeclaration.getProject()).findType(defaultSuperType,
-					scope.getResolveScope(), DotNetPsiSearcher.TypeResoleKind.UNKNOWN, CSharpTransform.INSTANCE);
+			DotNetTypeDeclaration type = DotNetPsiSearcher.getInstance(typeDeclaration).findType(defaultSuperType, scope.getResolveScope(),
+					DotNetPsiSearcher.TypeResoleKind.UNKNOWN, CSharpTransformer.INSTANCE);
 			if(type != null)
 			{
 				return Pair.create(type, DotNetGenericExtractor.EMPTY);
@@ -181,17 +182,21 @@ public class CSharpTypeDeclarationImplUtil
 		{
 			return null;
 		}
-		if(typeDeclaration.isStruct())
+
+		if(typeDeclaration instanceof CSharpDelegateMethodDeclaration)
 		{
-			return DotNetTypes.System.ValueType;
+			return DotNetTypes.System.MulticastDelegate;
 		}
-		else if(typeDeclaration.isEnum())
+
+		if(typeDeclaration.isEnum())
 		{
 			return DotNetTypes.System.Enum;
 		}
-		else
+		else if(typeDeclaration.isStruct())
 		{
-			return DotNetTypes.System.Object;
+			return DotNetTypes.System.ValueType;
 		}
+
+		return DotNetTypes.System.Object;
 	}
 }

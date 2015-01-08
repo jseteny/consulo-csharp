@@ -22,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.csharp.lang.psi.CSharpConversionMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpElementVisitor;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.type.CSharpStaticTypeRef;
+import org.mustbe.consulo.csharp.lang.psi.msil.MsilToCSharpManager;
 import org.mustbe.consulo.dotnet.psi.DotNetType;
 import org.mustbe.consulo.dotnet.resolve.DotNetTypeRef;
 import org.mustbe.consulo.msil.lang.psi.MsilMethodEntry;
@@ -35,9 +36,9 @@ import com.intellij.psi.PsiElement;
 public class MsilMethodAsCSharpConversionMethodDeclaration extends MsilMethodAsCSharpLikeMethodDeclaration implements
 		CSharpConversionMethodDeclaration
 {
-	public MsilMethodAsCSharpConversionMethodDeclaration(PsiElement parent, MsilMethodEntry methodEntry)
+	public MsilMethodAsCSharpConversionMethodDeclaration(MsilToCSharpManager manager, PsiElement parent, MsilMethodEntry methodEntry)
 	{
-		super(parent, methodEntry);
+		super(manager, parent, methodEntry);
 	}
 
 	@Override
@@ -57,7 +58,7 @@ public class MsilMethodAsCSharpConversionMethodDeclaration extends MsilMethodAsC
 	@LazyInstance
 	public DotNetTypeRef getReturnTypeRef()
 	{
-		return MsilToCSharpUtil.extractToCSharp(myOriginal.getReturnTypeRef(), myOriginal);
+		return myMsilToCSharpManager.extractToCSharp(myOriginal.getReturnTypeRef(), myOriginal);
 	}
 
 	@Override

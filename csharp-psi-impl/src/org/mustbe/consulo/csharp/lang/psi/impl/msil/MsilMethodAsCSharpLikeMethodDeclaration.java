@@ -24,6 +24,7 @@ import org.mustbe.consulo.csharp.lang.psi.CSharpModifier;
 import org.mustbe.consulo.csharp.lang.psi.CSharpSimpleParameterInfo;
 import org.mustbe.consulo.csharp.lang.psi.impl.light.CSharpLightGenericConstraintList;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.CSharpLikeMethodDeclarationImplUtil;
+import org.mustbe.consulo.csharp.lang.psi.msil.MsilToCSharpManager;
 import org.mustbe.consulo.dotnet.psi.DotNetGenericParameter;
 import org.mustbe.consulo.dotnet.psi.DotNetGenericParameterList;
 import org.mustbe.consulo.dotnet.psi.DotNetGenericParameterListOwner;
@@ -51,23 +52,26 @@ public abstract class MsilMethodAsCSharpLikeMethodDeclaration extends MsilElemen
 	private MsilGenericParameterListAsCSharpGenericParameterList myGenericParameterList;
 	protected CSharpLightGenericConstraintList myGenericConstraintList;
 
-	public MsilMethodAsCSharpLikeMethodDeclaration(PsiElement parent, MsilMethodEntry methodEntry)
+	public MsilMethodAsCSharpLikeMethodDeclaration(MsilToCSharpManager manager, PsiElement parent, MsilMethodEntry methodEntry)
 	{
-		this(parent, CSharpModifier.EMPTY_ARRAY, methodEntry);
+		this(manager, parent, CSharpModifier.EMPTY_ARRAY, methodEntry);
 	}
 
-	public MsilMethodAsCSharpLikeMethodDeclaration(PsiElement parent, @NotNull CSharpModifier[] modifiers, MsilMethodEntry methodEntry)
+	public MsilMethodAsCSharpLikeMethodDeclaration(MsilToCSharpManager manager,
+			PsiElement parent,
+			@NotNull CSharpModifier[] modifiers,
+			MsilMethodEntry methodEntry)
 	{
-		super(parent, methodEntry);
-		myModifierList = new MsilModifierListToCSharpModifierList(modifiers, this, methodEntry.getModifierList());
+		super(manager, parent, methodEntry);
+		myModifierList = new MsilModifierListToCSharpModifierList(manager, modifiers, this, methodEntry.getModifierList());
 	}
 
-	protected void setGenericParameterList(@NotNull DotNetGenericParameterListOwner owner)
+	protected void setGenericParameterList(MsilToCSharpManager manager, @NotNull DotNetGenericParameterListOwner owner)
 	{
 		DotNetGenericParameterList genericParameterList = owner.getGenericParameterList();
-		myGenericParameterList = genericParameterList == null ? null : new MsilGenericParameterListAsCSharpGenericParameterList(this,
+		myGenericParameterList = genericParameterList == null ? null : new MsilGenericParameterListAsCSharpGenericParameterList(manager, this,
 				genericParameterList);
-		myGenericConstraintList = MsilAsCSharpBuildUtil.buildConstraintList(myGenericParameterList);
+		myGenericConstraintList = MsilAsCSharpBuildUtil.buildConstraintList(manager, myGenericParameterList);
 	}
 
 	@NotNull
@@ -94,7 +98,7 @@ public abstract class MsilMethodAsCSharpLikeMethodDeclaration extends MsilElemen
 	@LazyInstance
 	public DotNetTypeRef getReturnTypeRef()
 	{
-		return MsilToCSharpUtil.extractToCSharp(myOriginal.getReturnTypeRef(), myOriginal);
+		return myMsilToCSharpManager.extractToCSharp(myOriginal.getReturnTypeRef(), myOriginal);
 	}
 
 	@Nullable
@@ -146,7 +150,7 @@ public abstract class MsilMethodAsCSharpLikeMethodDeclaration extends MsilElemen
 		DotNetTypeRef[] refs = new DotNetTypeRef[parameters.length];
 		for(int i = 0; i < parameters.length; i++)
 		{
-			refs[i] = MsilToCSharpUtil.extractToCSharp(parameters[i], myOriginal);
+			refs[i] = myMsilToCSharpManager.extractToCSharp(parameters[i], myOriginal);
 		}
 		return refs;
 	}
@@ -167,7 +171,7 @@ public abstract class MsilMethodAsCSharpLikeMethodDeclaration extends MsilElemen
 		for(int i = 0; i < parameters.length; i++)
 		{
 			DotNetParameter parameter = parameters[i];
-			newParameters[i] = new MsilParameterAsCSharpParameter(this, parameter, this, i);
+			newParameters[i] = new MsilParameterAsCSharpParameter(myMsilToCSharpManager, this, parameter, this, i);
 		}
 		return newParameters;
 	}

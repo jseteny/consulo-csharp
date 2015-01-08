@@ -25,6 +25,7 @@ import org.mustbe.consulo.csharp.lang.psi.CSharpElementVisitor;
 import org.mustbe.consulo.csharp.lang.psi.CSharpEventDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.impl.msil.typeParsing.SomeType;
 import org.mustbe.consulo.csharp.lang.psi.impl.msil.typeParsing.SomeTypeParser;
+import org.mustbe.consulo.csharp.lang.psi.msil.MsilToCSharpManager;
 import org.mustbe.consulo.dotnet.psi.DotNetNamedElement;
 import org.mustbe.consulo.dotnet.psi.DotNetType;
 import org.mustbe.consulo.dotnet.psi.DotNetXXXAccessor;
@@ -43,10 +44,13 @@ public class MsilEventAsCSharpEventDeclaration extends MsilVariableAsCSharpVaria
 {
 	private final DotNetXXXAccessor[] myAccessors;
 
-	public MsilEventAsCSharpEventDeclaration(PsiElement parent, MsilEventEntry variable, List<Pair<DotNetXXXAccessor, MsilMethodEntry>> pairs)
+	public MsilEventAsCSharpEventDeclaration(MsilToCSharpManager manager,
+			PsiElement parent,
+			MsilEventEntry variable,
+			List<Pair<DotNetXXXAccessor, MsilMethodEntry>> pairs)
 	{
-		super(parent, MsilPropertyAsCSharpPropertyDeclaration.getAdditionalModifiers(variable, pairs), variable);
-		myAccessors = MsilPropertyAsCSharpPropertyDeclaration.buildAccessors(this, pairs);
+		super(manager, parent, MsilPropertyAsCSharpPropertyDeclaration.getAdditionalModifiers(variable, pairs), variable);
+		myAccessors = MsilPropertyAsCSharpPropertyDeclaration.buildAccessors(manager, this, pairs);
 	}
 
 	@Override

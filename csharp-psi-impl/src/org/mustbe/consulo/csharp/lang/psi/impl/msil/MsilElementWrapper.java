@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.csharp.lang.CSharpFileType;
 import org.mustbe.consulo.csharp.lang.psi.impl.light.CSharpLightElement;
+import org.mustbe.consulo.csharp.lang.psi.msil.MsilToCSharpManager;
 import org.mustbe.consulo.msil.representation.MsilRepresentationNavigateUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -30,12 +31,21 @@ import com.intellij.psi.PsiFile;
  */
 public abstract class MsilElementWrapper<T extends PsiElement> extends CSharpLightElement<T>
 {
+	@NotNull
+	protected final MsilToCSharpManager myMsilToCSharpManager;
 	private final PsiElement myParent;
 
-	public MsilElementWrapper(@Nullable PsiElement parent, T msilElement)
+	public MsilElementWrapper(@NotNull MsilToCSharpManager msilToCSharpManager, @Nullable PsiElement parent, T msilElement)
 	{
 		super(msilElement);
+		myMsilToCSharpManager = msilToCSharpManager;
 		myParent = parent;
+	}
+
+	@NotNull
+	public MsilToCSharpManager getMsilToCSharpManager()
+	{
+		return myMsilToCSharpManager;
 	}
 
 	@Override

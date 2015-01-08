@@ -39,7 +39,7 @@ public class CSharpTypeResolveContext extends CSharpBaseResolveContext<CSharpTyp
 
 		if(myElement.hasModifier(CSharpModifier.PARTIAL))
 		{
-			DotNetTypeDeclaration[] types = DotNetPsiSearcher.getInstance(myElement.getProject()).findTypes(myElement.getVmQName(),
+			DotNetTypeDeclaration[] types = DotNetPsiSearcher.getInstance(myElement).findTypes(myElement.getVmQName(),
 					myElement.getResolveScope());
 
 			for(DotNetTypeDeclaration type : types)

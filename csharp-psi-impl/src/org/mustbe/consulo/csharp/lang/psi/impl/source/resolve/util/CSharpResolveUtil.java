@@ -163,7 +163,7 @@ public class CSharpResolveUtil
 			LOGGER.error(new PsiInvalidElementAccessException(entrance));
 		}
 
-		DotNetNamespaceAsElement root = DotNetPsiSearcher.getInstance(entrance.getProject()).findNamespace("", entrance.getResolveScope());
+		DotNetNamespaceAsElement root = DotNetPsiSearcher.getInstance(entrance).findNamespace("", entrance.getResolveScope());
 
 		assert root != null;
 
@@ -382,7 +382,7 @@ public class CSharpResolveUtil
 
 			if(walkParent)
 			{
-				DotNetNamespaceAsElement parentNamespace = DotNetPsiSearcher.getInstance(entrance.getProject()).findNamespace(parentQName,
+				DotNetNamespaceAsElement parentNamespace = DotNetPsiSearcher.getInstance(entrance).findNamespace(parentQName,
 						resolveScope);
 				if(parentNamespace != null && !walkChildren(processor, parentNamespace, walkParent, walkDeep, state))
 				{
@@ -401,7 +401,7 @@ public class CSharpResolveUtil
 			state = state.put(BaseDotNetNamespaceAsElement.RESOLVE_SCOPE, resolveScope);
 			state = state.put(BaseDotNetNamespaceAsElement.FILTER, DotNetNamespaceAsElement.ChildrenFilter.NONE);
 
-			DotNetNamespaceAsElement namespace = DotNetPsiSearcher.getInstance(entrance.getProject()).findNamespace(presentableQName, resolveScope);
+			DotNetNamespaceAsElement namespace = DotNetPsiSearcher.getInstance(entrance).findNamespace(presentableQName, resolveScope);
 			if(namespace != null && !walkChildren(processor, namespace, walkParent, walkDeep, state))
 			{
 				return false;

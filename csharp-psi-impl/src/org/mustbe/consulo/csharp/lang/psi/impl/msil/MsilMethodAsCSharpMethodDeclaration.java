@@ -30,9 +30,9 @@ import org.mustbe.consulo.csharp.lang.psi.CSharpModifier;
 import org.mustbe.consulo.csharp.lang.psi.CSharpTokens;
 import org.mustbe.consulo.csharp.lang.psi.impl.msil.typeParsing.SomeType;
 import org.mustbe.consulo.csharp.lang.psi.impl.msil.typeParsing.SomeTypeParser;
+import org.mustbe.consulo.csharp.lang.psi.msil.MsilToCSharpManager;
 import org.mustbe.consulo.dotnet.lang.psi.impl.stub.MsilHelper;
 import org.mustbe.consulo.dotnet.psi.DotNetType;
-import org.mustbe.consulo.dotnet.psi.DotNetTypeDeclaration;
 import org.mustbe.consulo.dotnet.resolve.DotNetTypeRef;
 import org.mustbe.consulo.msil.lang.psi.MsilMethodEntry;
 import com.intellij.openapi.util.NullableLazyValue;
@@ -86,17 +86,14 @@ public class MsilMethodAsCSharpMethodDeclaration extends MsilMethodAsCSharpLikeM
 			{
 				return pair.getFirst();
 			}
-			return myDelegate == null ? MsilMethodAsCSharpMethodDeclaration.super.getName() : MsilHelper.cutGenericMarker(myDelegate.getName());
+			return MsilMethodAsCSharpMethodDeclaration.super.getName();
 		}
 	};
 
-	private final DotNetTypeDeclaration myDelegate;
-
-	public MsilMethodAsCSharpMethodDeclaration(PsiElement parent, @Nullable DotNetTypeDeclaration declaration, @NotNull MsilMethodEntry methodEntry)
+	public MsilMethodAsCSharpMethodDeclaration(MsilToCSharpManager manager, PsiElement parent, @NotNull MsilMethodEntry methodEntry)
 	{
-		super(parent, CSharpModifier.EMPTY_ARRAY, methodEntry);
-		myDelegate = declaration;
-		setGenericParameterList(declaration != null ? declaration : methodEntry);
+		super(manager, parent, CSharpModifier.EMPTY_ARRAY, methodEntry);
+		setGenericParameterList(manager, methodEntry);
 	}
 
 	@Override
@@ -115,15 +112,14 @@ public class MsilMethodAsCSharpMethodDeclaration extends MsilMethodAsCSharpLikeM
 	@Override
 	public String getPresentableParentQName()
 	{
-		return myDelegate == null ? super.getPresentableParentQName() : myDelegate.getPresentableParentQName();
+		return super.getPresentableParentQName();
 	}
 
 	@Nullable
 	@Override
 	public String getPresentableQName()
 	{
-		return myDelegate == null ? MsilHelper.append(getPresentableParentQName(), getName()) : MsilHelper.cutGenericMarker(myDelegate
-				.getPresentableQName());
+		return MsilHelper.append(getPresentableParentQName(), getName());
 	}
 
 	@Nullable
@@ -139,12 +135,6 @@ public class MsilMethodAsCSharpMethodDeclaration extends MsilMethodAsCSharpLikeM
 	{
 		CSharpGenericConstraintList genericConstraintList = getGenericConstraintList();
 		return genericConstraintList == null ? CSharpGenericConstraint.EMPTY_ARRAY : genericConstraintList.getGenericConstraints();
-	}
-
-	@Override
-	public boolean isDelegate()
-	{
-		return myDelegate != null;
 	}
 
 	@Override
@@ -194,10 +184,5 @@ public class MsilMethodAsCSharpMethodDeclaration extends MsilMethodAsCSharpLikeM
 	{
 		DotNetType typeForImplement = getTypeForImplement();
 		return typeForImplement != null ? typeForImplement.toTypeRef() : DotNetTypeRef.ERROR_TYPE;
-	}
-
-	public DotNetTypeDeclaration getDelegate()
-	{
-		return myDelegate;
 	}
 }

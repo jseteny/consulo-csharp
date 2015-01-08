@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.csharp.lang.psi.CSharpElementVisitor;
 import org.mustbe.consulo.csharp.lang.psi.CSharpFieldDeclaration;
+import org.mustbe.consulo.csharp.lang.psi.msil.MsilToCSharpManager;
 import org.mustbe.consulo.dotnet.psi.DotNetVariable;
 import org.mustbe.consulo.msil.lang.psi.MsilFieldEntry;
 import org.mustbe.consulo.msil.lang.psi.MsilTokens;
@@ -31,9 +32,9 @@ import com.intellij.psi.PsiElement;
  */
 public class MsilFieldAsCSharpFieldDeclaration extends MsilVariableAsCSharpVariable implements CSharpFieldDeclaration
 {
-	public MsilFieldAsCSharpFieldDeclaration(PsiElement parent, DotNetVariable variable)
+	public MsilFieldAsCSharpFieldDeclaration(MsilToCSharpManager manager, PsiElement parent, DotNetVariable variable)
 	{
-		super(parent, variable);
+		super(manager, parent, variable);
 	}
 
 	@Override

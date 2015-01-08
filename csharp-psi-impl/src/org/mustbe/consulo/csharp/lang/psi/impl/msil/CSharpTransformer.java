@@ -17,21 +17,33 @@
 package org.mustbe.consulo.csharp.lang.psi.impl.msil;
 
 import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.csharp.lang.psi.msil.MsilToCSharpManager;
+import org.mustbe.consulo.dotnet.psi.DotNetLikeMethodDeclaration;
+import org.mustbe.consulo.dotnet.psi.DotNetTypeDeclaration;
+import com.intellij.openapi.module.Module;
 import com.intellij.psi.PsiElement;
-import com.intellij.util.NotNullFunction;
+import com.intellij.util.NotNullPairFunction;
 
 /**
  * @author VISTALL
  * @since 23.10.14
  */
-public class CSharpTransformer implements NotNullFunction<PsiElement, PsiElement>
+public class CSharpTransformer implements NotNullPairFunction<Module, DotNetTypeDeclaration, DotNetTypeDeclaration>
 {
 	public static final CSharpTransformer INSTANCE = new CSharpTransformer();
 
+
 	@NotNull
 	@Override
-	public PsiElement fun(PsiElement element)
+	public DotNetTypeDeclaration fun(Module t, DotNetTypeDeclaration v)
 	{
-		return MsilToCSharpUtil.wrap(element);
+		MsilToCSharpManager msilToCSharpManager = MsilToCSharpManager.getInstance(t);
+
+		PsiElement wrap = msilToCSharpManager.wrap(v);
+		if(wrap instanceof DotNetLikeMethodDeclaration)
+		{
+			return (DotNetTypeDeclaration) wrap;
+		}
+		return v;
 	}
 }

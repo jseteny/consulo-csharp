@@ -30,6 +30,7 @@ import org.mustbe.consulo.csharp.lang.psi.CSharpGenericConstraintList;
 import org.mustbe.consulo.csharp.lang.psi.CSharpTypeDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.impl.light.CSharpLightGenericConstraintList;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.CSharpTypeDeclarationImplUtil;
+import org.mustbe.consulo.csharp.lang.psi.msil.MsilToCSharpManager;
 import org.mustbe.consulo.dotnet.DotNetTypes;
 import org.mustbe.consulo.dotnet.lang.psi.impl.stub.MsilHelper;
 import org.mustbe.consulo.dotnet.psi.*;
@@ -64,6 +65,7 @@ public class MsilClassAsCSharpTypeDefinition extends MsilElementWrapper<MsilClas
 		protected DotNetNamedElement[] compute()
 		{
 			MsilClassAsCSharpTypeDefinition parentThis = MsilClassAsCSharpTypeDefinition.this;
+			MsilToCSharpManager manager = parentThis.getMsilToCSharpManager();
 
 			DotNetNamedElement[] temp = myOriginal.getMembers();
 			List<DotNetNamedElement> copy = new ArrayList<DotNetNamedElement>(temp.length);
@@ -122,12 +124,12 @@ public class MsilClassAsCSharpTypeDefinition extends MsilElementWrapper<MsilClas
 						if(value.getFirst().getAccessorKind() == DotNetXXXAccessor.Kind.GET && value.getSecond().getParameters().length == 1 ||
 								value.getFirst().getAccessorKind() == DotNetXXXAccessor.Kind.SET && value.getSecond().getParameters().length == 2)
 						{
-							list.add(new MsilPropertyAsCSharpArrayMethodDeclaration(parentThis, (MsilPropertyEntry) element, pairs));
+							list.add(new MsilPropertyAsCSharpArrayMethodDeclaration(manager, parentThis, (MsilPropertyEntry) element, pairs));
 							continue;
 						}
 					}
 
-					list.add(new MsilPropertyAsCSharpPropertyDeclaration(parentThis, (MsilPropertyEntry) element, pairs));
+					list.add(new MsilPropertyAsCSharpPropertyDeclaration(manager, parentThis, (MsilPropertyEntry) element, pairs));
 				}
 				else if(element instanceof MsilEventEntry)
 				{
@@ -147,7 +149,7 @@ public class MsilClassAsCSharpTypeDefinition extends MsilElementWrapper<MsilClas
 							}
 						}
 					}
-					list.add(new MsilEventAsCSharpEventDeclaration(parentThis, (MsilEventEntry) element, pairs));
+					list.add(new MsilEventAsCSharpEventDeclaration(manager, parentThis, (MsilEventEntry) element, pairs));
 				}
 				else if(element instanceof MsilFieldEntry)
 				{
@@ -159,16 +161,16 @@ public class MsilClassAsCSharpTypeDefinition extends MsilElementWrapper<MsilClas
 
 					if(isEnum)
 					{
-						list.add(new MsilFieldAsCSharpEnumConstantDeclaration(parentThis, (DotNetVariable) element));
+						list.add(new MsilFieldAsCSharpEnumConstantDeclaration(manager, parentThis, (DotNetVariable) element));
 					}
 					else
 					{
-						list.add(new MsilFieldAsCSharpFieldDeclaration(parentThis, (DotNetVariable) element));
+						list.add(new MsilFieldAsCSharpFieldDeclaration(manager, parentThis, (DotNetVariable) element));
 					}
 				}
 				else if(element instanceof MsilClassEntry)
 				{
-					list.add((DotNetNamedElement) MsilToCSharpUtil.wrap(element, parentThis));
+					list.add((DotNetNamedElement) manager.wrap(element, parentThis));
 				}
 			}
 
@@ -183,12 +185,12 @@ public class MsilClassAsCSharpTypeDefinition extends MsilElementWrapper<MsilClas
 					}
 					if(MsilHelper.CONSTRUCTOR_NAME.equals(nameFromBytecode))
 					{
-						list.add(new MsilMethodAsCSharpConstructorDeclaration(parentThis, MsilClassAsCSharpTypeDefinition.this,
+						list.add(new MsilMethodAsCSharpConstructorDeclaration(manager, parentThis, MsilClassAsCSharpTypeDefinition.this,
 								(MsilMethodEntry) member, false));
 					}
 					else if(Comparing.equal(nameFromBytecode, "op_Implicit") || Comparing.equal(nameFromBytecode, "op_Explicit"))
 					{
-						list.add(new MsilMethodAsCSharpConversionMethodDeclaration(parentThis, (MsilMethodEntry) member));
+						list.add(new MsilMethodAsCSharpConversionMethodDeclaration(manager, parentThis, (MsilMethodEntry) member));
 					}
 					else
 					{
@@ -196,12 +198,12 @@ public class MsilClassAsCSharpTypeDefinition extends MsilElementWrapper<MsilClas
 								.PROTECTED_KEYWORD);
 						if(isDeConstructor)
 						{
-							list.add(new MsilMethodAsCSharpConstructorDeclaration(parentThis, MsilClassAsCSharpTypeDefinition.this,
+							list.add(new MsilMethodAsCSharpConstructorDeclaration(manager, parentThis, MsilClassAsCSharpTypeDefinition.this,
 									(MsilMethodEntry) member, true));
 						}
 						else
 						{
-							list.add(new MsilMethodAsCSharpMethodDeclaration(parentThis, null, (MsilMethodEntry) member));
+							list.add(new MsilMethodAsCSharpMethodDeclaration(manager, parentThis, (MsilMethodEntry) member));
 						}
 					}
 				}
@@ -214,14 +216,14 @@ public class MsilClassAsCSharpTypeDefinition extends MsilElementWrapper<MsilClas
 	private MsilGenericParameterListAsCSharpGenericParameterList myGenericParameterList;
 	private CSharpLightGenericConstraintList myGenericConstraintList;
 
-	public MsilClassAsCSharpTypeDefinition(@Nullable PsiElement parent, MsilClassEntry classEntry)
+	public MsilClassAsCSharpTypeDefinition(@NotNull MsilToCSharpManager manager, @Nullable PsiElement parent, MsilClassEntry classEntry)
 	{
-		super(parent, classEntry);
-		myModifierList = new MsilModifierListToCSharpModifierList(this, classEntry.getModifierList());
+		super(manager, parent, classEntry);
+		myModifierList = new MsilModifierListToCSharpModifierList(manager, this, classEntry.getModifierList());
 		DotNetGenericParameterList genericParameterList = classEntry.getGenericParameterList();
-		myGenericParameterList = genericParameterList == null ? null : new MsilGenericParameterListAsCSharpGenericParameterList(this,
+		myGenericParameterList = genericParameterList == null ? null : new MsilGenericParameterListAsCSharpGenericParameterList(manager, this,
 				genericParameterList);
-		myGenericConstraintList = MsilAsCSharpBuildUtil.buildConstraintList(myGenericParameterList);
+		myGenericConstraintList = MsilAsCSharpBuildUtil.buildConstraintList(manager, myGenericParameterList);
 	}
 
 	@Override
@@ -332,7 +334,7 @@ public class MsilClassAsCSharpTypeDefinition extends MsilElementWrapper<MsilClas
 		DotNetTypeRef[] typeRefs = new DotNetTypeRef[extendTypeRefs.length];
 		for(int i = 0; i < typeRefs.length; i++)
 		{
-			typeRefs[i] = MsilToCSharpUtil.extractToCSharp(extendTypeRefs[i], myOriginal);
+			typeRefs[i] = myMsilToCSharpManager.extractToCSharp(extendTypeRefs[i], myOriginal);
 		}
 		return typeRefs;
 	}
@@ -347,7 +349,7 @@ public class MsilClassAsCSharpTypeDefinition extends MsilElementWrapper<MsilClas
 	@LazyInstance
 	public DotNetTypeRef getTypeRefForEnumConstants()
 	{
-		return MsilToCSharpUtil.extractToCSharp(myOriginal.getTypeRefForEnumConstants(), myOriginal);
+		return myMsilToCSharpManager.extractToCSharp(myOriginal.getTypeRefForEnumConstants(), myOriginal);
 	}
 
 	@Nullable

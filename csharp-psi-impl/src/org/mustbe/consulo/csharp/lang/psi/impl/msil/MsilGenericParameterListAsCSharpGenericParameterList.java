@@ -4,6 +4,7 @@ import org.consulo.lombok.annotations.LazyInstance;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.csharp.lang.psi.CSharpElementVisitor;
+import org.mustbe.consulo.csharp.lang.psi.msil.MsilToCSharpManager;
 import org.mustbe.consulo.dotnet.psi.DotNetGenericParameter;
 import org.mustbe.consulo.dotnet.psi.DotNetGenericParameterList;
 import com.intellij.psi.PsiElement;
@@ -15,9 +16,11 @@ import com.intellij.psi.PsiElement;
 public class MsilGenericParameterListAsCSharpGenericParameterList extends MsilElementWrapper<DotNetGenericParameterList> implements
 		DotNetGenericParameterList
 {
-	public MsilGenericParameterListAsCSharpGenericParameterList(@Nullable PsiElement parent, DotNetGenericParameterList msilElement)
+	public MsilGenericParameterListAsCSharpGenericParameterList(@NotNull MsilToCSharpManager manager,
+			@Nullable PsiElement parent,
+			DotNetGenericParameterList msilElement)
 	{
-		super(parent, msilElement);
+		super(manager, parent, msilElement);
 	}
 
 	@Override
@@ -45,8 +48,8 @@ public class MsilGenericParameterListAsCSharpGenericParameterList extends MsilEl
 		MsilGenericParameterAsCSharpGenericParameter[] parameters = new MsilGenericParameterAsCSharpGenericParameter[oldParameters.length];
 		for(int i = 0; i < oldParameters.length; i++)
 		{
-			parameters[i] = new MsilGenericParameterAsCSharpGenericParameter(MsilGenericParameterListAsCSharpGenericParameterList.this,
-					oldParameters[i]);
+			parameters[i] = new MsilGenericParameterAsCSharpGenericParameter(myMsilToCSharpManager,
+					MsilGenericParameterListAsCSharpGenericParameterList.this, oldParameters[i]);
 		}
 		return parameters;
 	}

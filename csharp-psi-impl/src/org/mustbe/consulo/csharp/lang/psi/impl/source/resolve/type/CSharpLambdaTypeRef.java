@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.csharp.lang.psi.CSharpMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpSimpleParameterInfo;
-import org.mustbe.consulo.csharp.lang.psi.impl.msil.CSharpTransform;
+import org.mustbe.consulo.csharp.lang.psi.impl.msil.CSharpTransformer;
 import org.mustbe.consulo.dotnet.DotNetTypes;
 import org.mustbe.consulo.dotnet.resolve.DotNetGenericExtractor;
 import org.mustbe.consulo.dotnet.resolve.DotNetPsiSearcher;
@@ -158,8 +158,8 @@ public class CSharpLambdaTypeRef implements DotNetTypeRef
 			{
 				if(myTarget == null)
 				{
-					return DotNetPsiSearcher.getInstance(scope.getProject()).findType(DotNetTypes.System.MulticastDelegate,
-							scope.getResolveScope(), DotNetPsiSearcher.TypeResoleKind.UNKNOWN, CSharpTransform.INSTANCE);
+					return DotNetPsiSearcher.getInstance(scope).findType(DotNetTypes.System.MulticastDelegate,
+							scope.getResolveScope(), DotNetPsiSearcher.TypeResoleKind.UNKNOWN, CSharpTransformer.INSTANCE);
 				}
 				return CSharpLambdaResolveResultUtil.createTypeFromDelegate(myTarget);
 			}

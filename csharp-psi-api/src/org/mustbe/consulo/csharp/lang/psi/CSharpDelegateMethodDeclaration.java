@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 must-be.org
+ * Copyright 2013-2015 must-be.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,13 @@
 
 package org.mustbe.consulo.csharp.lang.psi;
 
-import org.consulo.lombok.annotations.ArrayFactoryFields;
-import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.dotnet.psi.DotNetMethodDeclaration;
-import com.intellij.psi.tree.IElementType;
 
 /**
  * @author VISTALL
- * @since 30.11.13.
+ * @since 08.01.15
  */
-@ArrayFactoryFields
-public interface CSharpMethodDeclaration extends DotNetMethodDeclaration, CSharpGenericConstraintOwner, CSharpSimpleLikeMethodAsElement
+public interface CSharpDelegateMethodDeclaration extends DotNetMethodDeclaration, CSharpGenericConstraintOwner, CSharpSimpleLikeMethodAsElement,
+		CSharpTypeDeclaration
 {
-	boolean isOperator();
-
-	@Nullable
-	IElementType getOperatorElementType();
 }

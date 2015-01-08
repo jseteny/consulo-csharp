@@ -25,6 +25,7 @@ import org.mustbe.consulo.csharp.lang.psi.CSharpElementVisitor;
 import org.mustbe.consulo.csharp.lang.psi.CSharpFileFactory;
 import org.mustbe.consulo.csharp.lang.psi.CSharpModifier;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.type.CSharpRefTypeRef;
+import org.mustbe.consulo.csharp.lang.psi.msil.MsilToCSharpManager;
 import org.mustbe.consulo.dotnet.DotNetTypes;
 import org.mustbe.consulo.dotnet.externalAttributes.ExternalAttributeHolder;
 import org.mustbe.consulo.dotnet.externalAttributes.ExternalAttributeNode;
@@ -56,9 +57,13 @@ public class MsilParameterAsCSharpParameter extends MsilVariableAsCSharpVariable
 
 	private DotNetExpression myInitializer;
 
-	public MsilParameterAsCSharpParameter(PsiElement parent, DotNetVariable variable, DotNetLikeMethodDeclaration methodDeclaration, int index)
+	public MsilParameterAsCSharpParameter(@NotNull MsilToCSharpManager manager,
+			PsiElement parent,
+			DotNetVariable variable,
+			DotNetLikeMethodDeclaration methodDeclaration,
+			int index)
 	{
-		super(parent, getAdditionalModifiers(index, methodDeclaration), variable);
+		super(manager, parent, getAdditionalModifiers(index, methodDeclaration), variable);
 		myMethodDeclaration = methodDeclaration;
 		myIndex = index;
 
@@ -74,8 +79,7 @@ public class MsilParameterAsCSharpParameter extends MsilVariableAsCSharpVariable
 		{
 			PsiElement msilElement = parent.getOriginalElement();
 			// we can use mirror due ExtensionAttribute is in ban list
-			if(DotNetAttributeUtil.hasAttribute(msilElement, DotNetTypes.System.Runtime.CompilerServices
-					.ExtensionAttribute))
+			if(DotNetAttributeUtil.hasAttribute(msilElement, DotNetTypes.System.Runtime.CompilerServices.ExtensionAttribute))
 			{
 				return new CSharpModifier[]{CSharpModifier.THIS};
 			}
@@ -87,7 +91,7 @@ public class MsilParameterAsCSharpParameter extends MsilVariableAsCSharpVariable
 	@Override
 	protected MsilModifierListToCSharpModifierList createModifierList(CSharpModifier[] modifiers, DotNetVariable variable)
 	{
-		return new MsilModifierListToCSharpModifierList(modifiers, variable, variable.getModifierList())
+		return new MsilModifierListToCSharpModifierList(myMsilToCSharpManager, modifiers, variable, variable.getModifierList())
 		{
 			@NotNull
 			@Override

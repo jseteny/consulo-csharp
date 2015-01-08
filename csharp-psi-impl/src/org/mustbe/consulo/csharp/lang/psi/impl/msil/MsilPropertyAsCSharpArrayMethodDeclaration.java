@@ -29,6 +29,7 @@ import org.mustbe.consulo.csharp.lang.psi.impl.light.CSharpLightAttributeBuilder
 import org.mustbe.consulo.csharp.lang.psi.impl.msil.typeParsing.SomeType;
 import org.mustbe.consulo.csharp.lang.psi.impl.msil.typeParsing.SomeTypeParser;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.CSharpLikeMethodDeclarationImplUtil;
+import org.mustbe.consulo.csharp.lang.psi.msil.MsilToCSharpManager;
 import org.mustbe.consulo.dotnet.DotNetTypes;
 import org.mustbe.consulo.dotnet.psi.*;
 import org.mustbe.consulo.dotnet.resolve.DotNetTypeRef;
@@ -54,14 +55,16 @@ public class MsilPropertyAsCSharpArrayMethodDeclaration extends MsilElementWrapp
 
 	private final DotNetXXXAccessor[] myAccessors;
 
-	public MsilPropertyAsCSharpArrayMethodDeclaration(PsiElement parent, MsilPropertyEntry propertyEntry, List<Pair<DotNetXXXAccessor,
-			MsilMethodEntry>> pairs)
+	public MsilPropertyAsCSharpArrayMethodDeclaration(@NotNull MsilToCSharpManager manager,
+			PsiElement parent,
+			MsilPropertyEntry propertyEntry,
+			List<Pair<DotNetXXXAccessor, MsilMethodEntry>> pairs)
 	{
-		super(parent, propertyEntry);
+		super(manager, parent, propertyEntry);
 
-		myAccessors = MsilPropertyAsCSharpPropertyDeclaration.buildAccessors(this, pairs);
-		myModifierList = new MsilModifierListToCSharpModifierList(MsilPropertyAsCSharpPropertyDeclaration.getAdditionalModifiers(propertyEntry,
-				pairs), this, propertyEntry.getModifierList());
+		myAccessors = MsilPropertyAsCSharpPropertyDeclaration.buildAccessors(manager, this, pairs);
+		myModifierList = new MsilModifierListToCSharpModifierList(manager, MsilPropertyAsCSharpPropertyDeclaration.getAdditionalModifiers
+				(propertyEntry, pairs), this, propertyEntry.getModifierList());
 
 		String name = getName();
 		if(!Comparing.equal(name, DotNetPropertyDeclaration.DEFAULT_INDEX_PROPERTY_NAME))
@@ -76,7 +79,7 @@ public class MsilPropertyAsCSharpArrayMethodDeclaration extends MsilElementWrapp
 		Pair<DotNetXXXAccessor, MsilMethodEntry> p = pairs.get(0);
 
 		DotNetParameter firstParameter = p.getSecond().getParameters()[0];
-		myParameters = new DotNetParameter[]{new MsilParameterAsCSharpParameter(this, firstParameter, this, 0)};
+		myParameters = new DotNetParameter[]{new MsilParameterAsCSharpParameter(manager, this, firstParameter, this, 0)};
 	}
 
 	@Override
@@ -149,7 +152,7 @@ public class MsilPropertyAsCSharpArrayMethodDeclaration extends MsilElementWrapp
 	@LazyInstance
 	public DotNetTypeRef getReturnTypeRef()
 	{
-		return MsilToCSharpUtil.extractToCSharp(myOriginal.toTypeRef(false), myOriginal);
+		return myMsilToCSharpManager.extractToCSharp(myOriginal.toTypeRef(false), myOriginal);
 	}
 
 	@NotNull

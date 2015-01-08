@@ -24,7 +24,7 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.csharp.lang.psi.*;
-import org.mustbe.consulo.csharp.lang.psi.impl.msil.CSharpTransform;
+import org.mustbe.consulo.csharp.lang.psi.impl.msil.CSharpTransformer;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.AbstractScopeProcessor;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.CSharpResolveOptions;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.CompletionResolveScopeProcessor;
@@ -417,7 +417,7 @@ public class CSharpReferenceExpressionImplUtil
 				}
 				break;
 			case ROOT_NAMESPACE:
-				val temp = DotNetPsiSearcher.getInstance(element.getProject()).findNamespace("", element.getResolveScope());
+				val temp = DotNetPsiSearcher.getInstance(element).findNamespace("", element.getResolveScope());
 				assert temp != null;
 				return new ResolveResult[]{new PsiElementResolveResult(temp, true)};
 			case GENERIC_PARAMETER_FROM_PARENT:
@@ -441,8 +441,8 @@ public class CSharpReferenceExpressionImplUtil
 				{
 					return ResolveResult.EMPTY_ARRAY;
 				}
-				PsiElement resolve = DotNetPsiSearcher.getInstance(element.getProject()).findType(nativeRuntimeType, element.getResolveScope(),
-						DotNetPsiSearcher.TypeResoleKind.UNKNOWN, CSharpTransform.INSTANCE);
+				PsiElement resolve = DotNetPsiSearcher.getInstance(element).findType(nativeRuntimeType, element.getResolveScope(),
+						DotNetPsiSearcher.TypeResoleKind.UNKNOWN, CSharpTransformer.INSTANCE);
 				if(resolve == null)
 				{
 					return ResolveResult.EMPTY_ARRAY;
@@ -507,7 +507,7 @@ public class CSharpReferenceExpressionImplUtil
 
 				if(!completion)
 				{
-					namespace = DotNetPsiSearcher.getInstance(element.getProject()).findNamespace(qName, element.getResolveScope());
+					namespace = DotNetPsiSearcher.getInstance(element).findNamespace(qName, element.getResolveScope());
 
 					if(namespace == null)
 					{
@@ -523,7 +523,7 @@ public class CSharpReferenceExpressionImplUtil
 						qualifiedText = StringUtil.strip(qualifier.getText(), CharFilter.NOT_WHITESPACE_FILTER);
 					}
 
-					namespace = DotNetPsiSearcher.getInstance(element.getProject()).findNamespace(qualifiedText, element.getResolveScope());
+					namespace = DotNetPsiSearcher.getInstance(element).findNamespace(qualifiedText, element.getResolveScope());
 
 					if(namespace == null)
 					{

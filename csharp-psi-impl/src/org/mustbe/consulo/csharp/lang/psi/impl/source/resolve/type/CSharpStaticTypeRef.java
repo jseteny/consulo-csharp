@@ -17,8 +17,8 @@
 package org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.type;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.csharp.lang.psi.impl.msil.CSharpTransform;
-import org.mustbe.consulo.dotnet.psi.DotNetTypeDeclaration;
+import org.mustbe.consulo.csharp.lang.psi.impl.msil.CSharpTransformer;
+import org.mustbe.consulo.dotnet.psi.DotNetLikeTypeDeclaration;
 import org.mustbe.consulo.dotnet.resolve.DotNetGenericExtractor;
 import org.mustbe.consulo.dotnet.resolve.DotNetPsiSearcher;
 import org.mustbe.consulo.dotnet.resolve.DotNetTypeRef;
@@ -63,8 +63,8 @@ public class CSharpStaticTypeRef extends DotNetTypeRef.Adapter
 	@Override
 	public DotNetTypeResolveResult resolve(@NotNull PsiElement scope)
 	{
-		DotNetTypeDeclaration type = DotNetPsiSearcher.getInstance(scope.getProject()).findType(myWrapperQualifiedClass, scope.getResolveScope(),
-				DotNetPsiSearcher.TypeResoleKind.UNKNOWN, CSharpTransform.INSTANCE);
+		DotNetLikeTypeDeclaration type = DotNetPsiSearcher.getInstance(scope).findType(myWrapperQualifiedClass, scope.getResolveScope(),
+				DotNetPsiSearcher.TypeResoleKind.UNKNOWN, CSharpTransformer.INSTANCE);
 		if(type == null)
 		{
 			return DotNetTypeResolveResult.EMPTY;

@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.csharp.lang.psi.CSharpConstructorDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpElementVisitor;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.type.CSharpTypeRefByQName;
+import org.mustbe.consulo.csharp.lang.psi.msil.MsilToCSharpManager;
 import org.mustbe.consulo.dotnet.DotNetTypes;
 import org.mustbe.consulo.dotnet.psi.DotNetGenericParameter;
 import org.mustbe.consulo.dotnet.psi.DotNetGenericParameterList;
@@ -37,10 +38,13 @@ public class MsilMethodAsCSharpConstructorDeclaration extends MsilMethodAsCSharp
 	private final MsilClassAsCSharpTypeDefinition myTypeDefinition;
 	private final boolean myDeConstructor;
 
-	public MsilMethodAsCSharpConstructorDeclaration(
-			PsiElement parent, MsilClassAsCSharpTypeDefinition typeDefinition, MsilMethodEntry methodEntry, boolean deConstructor)
+	public MsilMethodAsCSharpConstructorDeclaration(MsilToCSharpManager manager,
+			PsiElement parent,
+			MsilClassAsCSharpTypeDefinition typeDefinition,
+			MsilMethodEntry methodEntry,
+			boolean deConstructor)
 	{
-		super(parent, methodEntry);
+		super(manager, parent, methodEntry);
 		myTypeDefinition = typeDefinition;
 		myDeConstructor = deConstructor;
 	}

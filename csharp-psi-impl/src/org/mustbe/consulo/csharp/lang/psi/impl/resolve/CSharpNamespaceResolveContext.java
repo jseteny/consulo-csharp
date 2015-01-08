@@ -14,9 +14,9 @@ import org.mustbe.consulo.csharp.lang.psi.CSharpMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpModifier;
 import org.mustbe.consulo.csharp.lang.psi.CSharpTypeDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.impl.msil.CSharpTransformer;
-import org.mustbe.consulo.csharp.lang.psi.impl.msil.MsilToCSharpUtil;
 import org.mustbe.consulo.csharp.lang.psi.impl.stub.index.CSharpIndexKeys;
 import org.mustbe.consulo.csharp.lang.psi.impl.stub.index.TypeWithExtensionMethodsIndex;
+import org.mustbe.consulo.csharp.lang.psi.msil.MsilToCSharpManager;
 import org.mustbe.consulo.csharp.lang.psi.resolve.CSharpElementGroup;
 import org.mustbe.consulo.csharp.lang.psi.resolve.CSharpResolveContext;
 import org.mustbe.consulo.dotnet.lang.psi.impl.BaseDotNetNamespaceAsElement;
@@ -43,9 +43,11 @@ public class CSharpNamespaceResolveContext implements CSharpResolveContext
 {
 	private final DotNetNamespaceAsElement myNamespaceAsElement;
 	private final GlobalSearchScope myResolveScope;
+	private final MsilToCSharpManager myMsilToCSharpManager;
 
 	public CSharpNamespaceResolveContext(DotNetNamespaceAsElement namespaceAsElement, GlobalSearchScope resolveScope)
 	{
+		myMsilToCSharpManager = MsilToCSharpManager.getInstance(namespaceAsElement.getModule());
 		myNamespaceAsElement = namespaceAsElement;
 		myResolveScope = resolveScope;
 	}
@@ -102,7 +104,7 @@ public class CSharpNamespaceResolveContext implements CSharpResolveContext
 		val processed = new THashSet<String>();
 		for(DotNetTypeDeclaration typeDeclaration : decls)
 		{
-			PsiElement wrappedDeclaration = MsilToCSharpUtil.wrap(typeDeclaration);
+			PsiElement wrappedDeclaration = myMsilToCSharpManager.wrap(typeDeclaration);
 
 			if(typeDeclaration instanceof CSharpTypeDeclaration && typeDeclaration.hasModifier(CSharpModifier.PARTIAL))
 			{
@@ -132,7 +134,7 @@ public class CSharpNamespaceResolveContext implements CSharpResolveContext
 				processor);
 	}
 
-	public static boolean processExtensionMethodGroups(@Nullable final String qName,
+	public boolean processExtensionMethodGroups(@Nullable final String qName,
 			@NotNull final Project project,
 			@NotNull final GlobalSearchScope scope,
 			@NotNull final Processor<CSharpElementGroup<CSharpMethodDeclaration>> processor)
@@ -151,7 +153,7 @@ public class CSharpNamespaceResolveContext implements CSharpResolveContext
 			@Override
 			public boolean process(DotNetTypeDeclaration typeDeclaration)
 			{
-				PsiElement wrappedDeclaration = MsilToCSharpUtil.wrap(typeDeclaration);
+				PsiElement wrappedDeclaration = myMsilToCSharpManager.wrap(typeDeclaration);
 
 				if(typeDeclaration instanceof CSharpTypeDeclaration && typeDeclaration.hasModifier(CSharpModifier.PARTIAL))
 				{

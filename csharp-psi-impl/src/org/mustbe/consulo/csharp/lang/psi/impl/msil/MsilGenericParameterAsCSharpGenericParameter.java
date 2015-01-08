@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.csharp.lang.psi.CSharpElementVisitor;
 import org.mustbe.consulo.csharp.lang.psi.CSharpModifier;
+import org.mustbe.consulo.csharp.lang.psi.msil.MsilToCSharpManager;
 import org.mustbe.consulo.dotnet.psi.DotNetGenericParameter;
 import org.mustbe.consulo.dotnet.psi.DotNetModifier;
 import org.mustbe.consulo.dotnet.psi.DotNetModifierList;
@@ -17,9 +18,11 @@ import com.intellij.util.IncorrectOperationException;
  */
 public class MsilGenericParameterAsCSharpGenericParameter extends MsilElementWrapper<DotNetGenericParameter> implements DotNetGenericParameter
 {
-	public MsilGenericParameterAsCSharpGenericParameter(@Nullable PsiElement parent, DotNetGenericParameter msilElement)
+	public MsilGenericParameterAsCSharpGenericParameter(@NotNull MsilToCSharpManager manager,
+			@Nullable PsiElement parent,
+			DotNetGenericParameter msilElement)
 	{
-		super(parent, msilElement);
+		super(manager, parent, msilElement);
 	}
 
 	@Override

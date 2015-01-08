@@ -73,7 +73,7 @@ public class CSharpUsingNamespaceStatementImpl extends CSharpStubElementImpl<CSh
 			return null;
 		}
 		String qName = StringUtil.strip(referenceText, CharFilter.NOT_WHITESPACE_FILTER);
-		return DotNetPsiSearcher.getInstance(getProject()).findNamespace(qName, getResolveScope());
+		return DotNetPsiSearcher.getInstance(this).findNamespace(qName, getResolveScope());
 	}
 
 	@Override

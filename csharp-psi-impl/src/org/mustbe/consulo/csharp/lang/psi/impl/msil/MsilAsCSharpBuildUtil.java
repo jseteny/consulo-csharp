@@ -8,6 +8,7 @@ import org.mustbe.consulo.csharp.lang.psi.CSharpGenericConstraint;
 import org.mustbe.consulo.csharp.lang.psi.CSharpTokens;
 import org.mustbe.consulo.csharp.lang.psi.impl.light.CSharpLightGenericConstraintList;
 import org.mustbe.consulo.csharp.lang.psi.impl.light.builder.CSharpLightGenericConstraintBuilder;
+import org.mustbe.consulo.csharp.lang.psi.msil.MsilToCSharpManager;
 import org.mustbe.consulo.dotnet.psi.DotNetGenericParameter;
 import org.mustbe.consulo.dotnet.psi.DotNetGenericParameterList;
 import org.mustbe.consulo.dotnet.resolve.DotNetPsiSearcher;
@@ -23,7 +24,7 @@ import com.intellij.util.containers.ContainerUtil;
 public class MsilAsCSharpBuildUtil
 {
 	@Nullable
-	public static CSharpLightGenericConstraintList buildConstraintList(@Nullable DotNetGenericParameterList genericParameterList)
+	public static CSharpLightGenericConstraintList buildConstraintList(MsilToCSharpManager manager, @Nullable DotNetGenericParameterList genericParameterList)
 	{
 		if(genericParameterList == null)
 		{
@@ -66,7 +67,7 @@ public class MsilAsCSharpBuildUtil
 
 			for(DotNetTypeRef extendTypeRef : extendTypeRefs)
 			{
-				builder.addTypeConstraint(MsilToCSharpUtil.extractToCSharp(extendTypeRef, msilGenericParameter));
+				builder.addTypeConstraint(manager.extractToCSharp(extendTypeRef, msilGenericParameter));
 			}
 
 			if(!builder.isEmpty())

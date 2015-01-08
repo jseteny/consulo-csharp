@@ -27,6 +27,7 @@ import org.mustbe.consulo.dotnet.psi.DotNetQualifiedElement;
 import org.mustbe.consulo.dotnet.psi.DotNetTypeDeclaration;
 import org.mustbe.consulo.dotnet.resolve.DotNetNamespaceAsElement;
 import org.mustbe.consulo.dotnet.resolve.impl.IndexBasedDotNetPsiSearcher;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndexKey;
@@ -38,9 +39,9 @@ import com.intellij.psi.stubs.StubIndexKey;
 @ProjectService
 public class CSharpPsiSearcher extends IndexBasedDotNetPsiSearcher
 {
-	public CSharpPsiSearcher(Project project)
+	public CSharpPsiSearcher(Module module)
 	{
-		super(project);
+		super(module);
 	}
 
 	@NotNull

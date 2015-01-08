@@ -28,6 +28,7 @@ import org.mustbe.consulo.csharp.lang.psi.CSharpModifier;
 import org.mustbe.consulo.csharp.lang.psi.CSharpPropertyDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.impl.msil.typeParsing.SomeType;
 import org.mustbe.consulo.csharp.lang.psi.impl.msil.typeParsing.SomeTypeParser;
+import org.mustbe.consulo.csharp.lang.psi.msil.MsilToCSharpManager;
 import org.mustbe.consulo.dotnet.psi.DotNetNamedElement;
 import org.mustbe.consulo.dotnet.psi.DotNetType;
 import org.mustbe.consulo.dotnet.psi.DotNetXXXAccessor;
@@ -51,22 +52,24 @@ public class MsilPropertyAsCSharpPropertyDeclaration extends MsilVariableAsCShar
 {
 	private DotNetXXXAccessor[] myAccessors;
 
-	public MsilPropertyAsCSharpPropertyDeclaration(PsiElement parent,
+	public MsilPropertyAsCSharpPropertyDeclaration(MsilToCSharpManager manager,
+			PsiElement parent,
 			MsilPropertyEntry variable,
 			List<Pair<DotNetXXXAccessor, MsilMethodEntry>> pairs)
 	{
-		super(parent, getAdditionalModifiers(variable, pairs), variable);
-		myAccessors = buildAccessors(this, pairs);
+		super(manager, parent, getAdditionalModifiers(variable, pairs), variable);
+		myAccessors = buildAccessors(manager, this, pairs);
 	}
 
-	public static DotNetXXXAccessor[] buildAccessors(@NotNull PsiElement parent,
+	public static DotNetXXXAccessor[] buildAccessors(@NotNull MsilToCSharpManager manager,
+			@NotNull PsiElement parent,
 			@NotNull List<Pair<DotNetXXXAccessor, MsilMethodEntry>> pairs)
 	{
 		List<DotNetXXXAccessor> accessors = new ArrayList<DotNetXXXAccessor>(2);
 
 		for(Pair<DotNetXXXAccessor, MsilMethodEntry> pair : pairs)
 		{
-			accessors.add(new MsilXXXAccessorAsCSharpXXXAccessor(parent, pair.getFirst(), pair.getSecond()));
+			accessors.add(new MsilXXXAccessorAsCSharpXXXAccessor(manager, parent, pair.getFirst(), pair.getSecond()));
 		}
 		return ContainerUtil.toArray(accessors, DotNetXXXAccessor.ARRAY_FACTORY);
 	}

@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.csharp.lang.psi.CSharpModifier;
+import org.mustbe.consulo.csharp.lang.psi.msil.MsilToCSharpManager;
 import org.mustbe.consulo.dotnet.psi.DotNetExpression;
 import org.mustbe.consulo.dotnet.psi.DotNetModifier;
 import org.mustbe.consulo.dotnet.psi.DotNetModifierList;
@@ -48,14 +49,14 @@ public abstract class MsilVariableAsCSharpVariable extends MsilElementWrapper<Do
 		}
 	};
 
-	public MsilVariableAsCSharpVariable(PsiElement parent, DotNetVariable variable)
+	public MsilVariableAsCSharpVariable(@NotNull MsilToCSharpManager manager, @Nullable PsiElement parent, DotNetVariable variable)
 	{
-		this(parent, CSharpModifier.EMPTY_ARRAY, variable);
+		this(manager, parent, CSharpModifier.EMPTY_ARRAY, variable);
 	}
 
-	public MsilVariableAsCSharpVariable(PsiElement parent, CSharpModifier[] modifiers, DotNetVariable variable)
+	public MsilVariableAsCSharpVariable(@NotNull MsilToCSharpManager manager, @Nullable PsiElement parent, CSharpModifier[] modifiers, DotNetVariable variable)
 	{
-		super(parent, variable);
+		super(manager, parent, variable);
 		setNavigationElement(variable);
 		myModifierList = createModifierList(modifiers, variable);
 	}
@@ -63,7 +64,7 @@ public abstract class MsilVariableAsCSharpVariable extends MsilElementWrapper<Do
 	@NotNull
 	protected MsilModifierListToCSharpModifierList createModifierList(CSharpModifier[] modifiers, DotNetVariable variable)
 	{
-		return new MsilModifierListToCSharpModifierList(modifiers, variable, variable.getModifierList());
+		return new MsilModifierListToCSharpModifierList(myMsilToCSharpManager, modifiers, variable, variable.getModifierList());
 	}
 
 	@Override
@@ -100,7 +101,7 @@ public abstract class MsilVariableAsCSharpVariable extends MsilElementWrapper<Do
 	@NotNull
 	public DotNetTypeRef toTypeRefImpl()
 	{
-		return MsilToCSharpUtil.extractToCSharp(myOriginal.toTypeRef(false), myOriginal);
+		return myMsilToCSharpManager.extractToCSharp(myOriginal.toTypeRef(false), myOriginal);
 	}
 
 	@Nullable
