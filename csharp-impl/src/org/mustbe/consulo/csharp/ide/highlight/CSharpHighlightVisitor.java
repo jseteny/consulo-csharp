@@ -249,10 +249,13 @@ public class CSharpHighlightVisitor extends CSharpElementVisitor implements High
 	public void visitMethodDeclaration(CSharpMethodDeclaration declaration)
 	{
 		super.visitMethodDeclaration(declaration);
-		if(declaration.isDelegate())
-		{
-			CSharpHighlightUtil.highlightNamed(myHighlightInfoHolder, declaration, declaration.getNameIdentifier(), null);
-		}
+	}
+
+	@Override
+	public void visitDelegateMethodDeclaration(CSharpDelegateMethodDeclaration declaration)
+	{
+		super.visitDelegateMethodDeclaration(declaration);
+		CSharpHighlightUtil.highlightNamed(myHighlightInfoHolder, declaration, declaration.getNameIdentifier(), null);
 	}
 
 	@Override

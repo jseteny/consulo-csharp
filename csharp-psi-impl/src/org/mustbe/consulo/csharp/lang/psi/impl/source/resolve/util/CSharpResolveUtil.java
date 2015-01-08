@@ -22,6 +22,7 @@ import java.util.List;
 import org.consulo.lombok.annotations.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.csharp.lang.psi.CSharpDelegateMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpTypeDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpTypeDefStatement;
@@ -86,7 +87,7 @@ public class CSharpResolveUtil
 
 	public static final Key<DotNetQualifiedElement> ACCESSOR_VALUE_VARIABLE_OWNER = Key.create("accessor.value.variable");
 	public static final Key<CSharpMethodDeclaration> EXTENSION_METHOD_WRAPPER = Key.create("extension.method.wrapper");
-	public static final Key<CSharpMethodDeclaration> DELEGATE_METHOD_TYPE = Key.create("delegate.method.type");
+	public static final Key<CSharpDelegateMethodDeclaration> DELEGATE_METHOD_TYPE = Key.create("delegate.method.type");
 	public static final Key<CSharpResolveSelector> SELECTOR = Key.create("resolve.selector");
 	public static final Key<Boolean> WALK_DEEP = Key.create("walk.deep");
 

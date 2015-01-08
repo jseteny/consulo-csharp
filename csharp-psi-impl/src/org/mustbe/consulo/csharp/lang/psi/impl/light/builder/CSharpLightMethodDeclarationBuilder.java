@@ -55,12 +55,6 @@ public class CSharpLightMethodDeclarationBuilder extends CSharpLightLikeMethodDe
 	}
 
 	@Override
-	public boolean isDelegate()
-	{
-		return false;
-	}
-
-	@Override
 	public boolean isOperator()
 	{
 		return myOperatorElementType != null;

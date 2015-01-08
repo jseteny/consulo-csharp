@@ -17,7 +17,7 @@
 package org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.type;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.csharp.lang.psi.CSharpMethodDeclaration;
+import org.mustbe.consulo.csharp.lang.psi.CSharpDelegateMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.impl.CSharpTypeUtil;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.util.CSharpResolveUtil;
 import org.mustbe.consulo.dotnet.psi.DotNetTypeDeclaration;
@@ -66,7 +66,7 @@ public class CSharpTypeRefByTypeDeclaration extends DotNetTypeRef.Adapter
 	@Override
 	public DotNetTypeResolveResult resolve(@NotNull PsiElement scope)
 	{
-		CSharpMethodDeclaration methodDeclaration = myElement.getUserData(CSharpResolveUtil.DELEGATE_METHOD_TYPE);
+		CSharpDelegateMethodDeclaration methodDeclaration = myElement.getUserData(CSharpResolveUtil.DELEGATE_METHOD_TYPE);
 		if(methodDeclaration != null)
 		{
 			return new CSharpReferenceTypeRef.LambdaResult(scope, methodDeclaration, myExtractor);

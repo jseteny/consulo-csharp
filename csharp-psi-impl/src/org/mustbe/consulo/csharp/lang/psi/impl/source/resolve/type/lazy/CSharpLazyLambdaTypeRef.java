@@ -19,6 +19,7 @@ package org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.type.lazy;
 import org.consulo.lombok.annotations.LazyInstance;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.csharp.lang.psi.CSharpDelegateMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpSimpleParameterInfo;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.type.CSharpLambdaTypeRef;
@@ -35,14 +36,14 @@ public class CSharpLazyLambdaTypeRef extends CSharpLambdaTypeRef
 	@NotNull
 	private final PsiElement myScope;
 
-	public CSharpLazyLambdaTypeRef(@NotNull PsiElement scope, @NotNull CSharpMethodDeclaration method)
+	public CSharpLazyLambdaTypeRef(@NotNull PsiElement scope, @NotNull CSharpDelegateMethodDeclaration method)
 	{
 		super(method);
 		myScope = scope;
 	}
 
 	public CSharpLazyLambdaTypeRef(@NotNull PsiElement scope,
-			@Nullable CSharpMethodDeclaration target,
+			@Nullable CSharpDelegateMethodDeclaration target,
 			@NotNull CSharpSimpleParameterInfo[] parameterInfos,
 			@NotNull DotNetTypeRef returnType)
 	{

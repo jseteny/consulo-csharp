@@ -80,7 +80,7 @@ public class DeclarationParsing extends SharedParsingHelpers
 		{
 			builder.advanceLexer();
 
-			MethodParsing.parseMethodStartAtType(builder, marker);
+			MethodParsing.parseDelegateMethodStartAtType(builder, marker);
 		}
 		else if(tokenType == USING_KEYWORD)
 		{

@@ -47,7 +47,7 @@ public enum ExecuteTarget
 				@Override
 				public boolean isMyElement(@NotNull PsiElement element)
 				{
-					return element instanceof CSharpMethodDeclaration && ((CSharpMethodDeclaration) element).isDelegate();
+					return element instanceof CSharpDelegateMethodDeclaration;
 				}
 			},
 	TYPE_DEF

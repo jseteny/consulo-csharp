@@ -28,7 +28,6 @@ import org.mustbe.consulo.dotnet.psi.DotNetTypeDeclaration;
 import org.mustbe.consulo.dotnet.resolve.DotNetNamespaceAsElement;
 import org.mustbe.consulo.dotnet.resolve.impl.IndexBasedDotNetPsiSearcher;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndexKey;
 
@@ -48,7 +47,7 @@ public class CSharpPsiSearcher extends IndexBasedDotNetPsiSearcher
 	@Override
 	protected DotNetNamespaceAsElement createNamespace(@NotNull String indexKey, @NotNull String qName)
 	{
-		return new CSharpNamespaceAsElementImpl(myProject, indexKey, qName, this);
+		return new CSharpNamespaceAsElementImpl(myModule, indexKey, qName, this);
 	}
 
 	@NotNull
@@ -70,6 +69,6 @@ public class CSharpPsiSearcher extends IndexBasedDotNetPsiSearcher
 	public Collection<? extends DotNetTypeDeclaration> findTypesImpl(@NotNull String vmQName, @NotNull GlobalSearchScope scope,
 			@NotNull TypeResoleKind typeResoleKind)
 	{
-		return TypeByVmQNameIndex.getInstance().get(vmQName, myProject, scope);
+		return TypeByVmQNameIndex.getInstance().get(vmQName, myModule.getProject(), scope);
 	}
 }

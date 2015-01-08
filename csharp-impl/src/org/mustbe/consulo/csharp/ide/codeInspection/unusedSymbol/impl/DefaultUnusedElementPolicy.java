@@ -17,7 +17,7 @@
 package org.mustbe.consulo.csharp.ide.codeInspection.unusedSymbol.impl;
 
 import org.mustbe.consulo.csharp.ide.codeInspection.unusedSymbol.UnusedElementPolicy;
-import org.mustbe.consulo.csharp.lang.psi.CSharpMethodDeclaration;
+import org.mustbe.consulo.csharp.lang.psi.CSharpDelegateMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpModifier;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.CSharpAnonymMethodExpressionImpl;
 import org.mustbe.consulo.dotnet.psi.DotNetLikeMethodDeclaration;
@@ -39,7 +39,7 @@ public class DefaultUnusedElementPolicy extends UnusedElementPolicy
 			return false;
 		}
 
-		if(parameterOwner instanceof CSharpMethodDeclaration && ((CSharpMethodDeclaration) parameterOwner).isDelegate())
+		if(parameterOwner instanceof CSharpDelegateMethodDeclaration)
 		{
 			return false;
 		}

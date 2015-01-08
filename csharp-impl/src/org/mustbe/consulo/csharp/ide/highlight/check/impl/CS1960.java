@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.csharp.ide.codeInsight.actions.RemoveModifierFix;
 import org.mustbe.consulo.csharp.ide.highlight.check.CompilerCheck;
-import org.mustbe.consulo.csharp.lang.psi.CSharpMethodDeclaration;
+import org.mustbe.consulo.csharp.lang.psi.CSharpDelegateMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpModifier;
 import org.mustbe.consulo.csharp.lang.psi.CSharpTypeDeclaration;
 import org.mustbe.consulo.csharp.module.extension.CSharpLanguageVersion;
@@ -57,7 +57,7 @@ public class CS1960 extends CompilerCheck<DotNetGenericParameter>
 				assert parameterListOwner != null;
 
 				if(parameterListOwner instanceof CSharpTypeDeclaration && ((CSharpTypeDeclaration) parameterListOwner).isInterface() ||
-						parameterListOwner instanceof CSharpMethodDeclaration && ((CSharpMethodDeclaration) parameterListOwner).isDelegate())
+						parameterListOwner instanceof CSharpDelegateMethodDeclaration)
 				{
 					return null;
 				}

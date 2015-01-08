@@ -33,7 +33,6 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.util.BitUtil;
 
 /**
  * @author VISTALL
@@ -81,17 +80,6 @@ public class CSharpMethodDeclarationImpl extends CSharpLikeMethodDeclarationImpl
 			return CSharpOperatorNameHelper.getOperatorName(operatorElementType);
 		}
 		return super.getName();
-	}
-
-	@Override
-	public boolean isDelegate()
-	{
-		CSharpMethodDeclStub stub = getStub();
-		if(stub != null)
-		{
-			return BitUtil.isSet(stub.getOtherModifierMask(), CSharpMethodDeclStub.DELEGATE_MASK);
-		}
-		return findChildByType(CSharpTokens.DELEGATE_KEYWORD) != null;
 	}
 
 	@Override

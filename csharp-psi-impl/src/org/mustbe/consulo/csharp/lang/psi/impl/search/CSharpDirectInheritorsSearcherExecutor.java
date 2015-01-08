@@ -26,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.csharp.lang.psi.impl.stub.index.ExtendsListIndex;
 import org.mustbe.consulo.dotnet.psi.DotNetTypeDeclaration;
 import org.mustbe.consulo.dotnet.psi.DotNetTypeList;
-import org.mustbe.consulo.dotnet.psi.search.searches.DirectClassInheritorsSearch;
+import org.mustbe.consulo.dotnet.psi.search.searches.TypeSearchParameters;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.openapi.util.Comparing;
@@ -50,12 +50,12 @@ import com.intellij.util.containers.HashMap;
  *         <p/>
  *         Copied from Java plugin by Jetbrains (com.intellij.psi.search.searches.ClassInheritorsSearch)
  */
-public class CSharpDirectInheritorsSearcherExecutor implements QueryExecutor<DotNetTypeDeclaration, DirectClassInheritorsSearch.SearchParameters>
+public class CSharpDirectInheritorsSearcherExecutor implements QueryExecutor<DotNetTypeDeclaration, TypeSearchParameters>
 {
 	@Override
-	public boolean execute(@NotNull final DirectClassInheritorsSearch.SearchParameters p, @NotNull final Processor<DotNetTypeDeclaration> consumer)
+	public boolean execute(@NotNull final TypeSearchParameters p, @NotNull final Processor<DotNetTypeDeclaration> consumer)
 	{
-		final DotNetTypeDeclaration aClass = p.getClassToProcess();
+		final DotNetTypeDeclaration aClass = p.getTypeLikeToProcess();
 		final PsiManagerImpl psiManager = (PsiManagerImpl) aClass.getManager();
 
 		final SearchScope useScope = ApplicationManager.getApplication().runReadAction(new Computable<SearchScope>()
@@ -169,7 +169,7 @@ public class CSharpDirectInheritorsSearcherExecutor implements QueryExecutor<Dot
 		return true;
 	}
 
-	private static boolean checkInheritance(final DirectClassInheritorsSearch.SearchParameters p, final DotNetTypeDeclaration aClass,
+	private static boolean checkInheritance(final TypeSearchParameters p, final DotNetTypeDeclaration aClass,
 			final DotNetTypeDeclaration candidate)
 	{
 		return ApplicationManager.getApplication().runReadAction(new Computable<Boolean>()

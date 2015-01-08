@@ -26,7 +26,7 @@ import java.util.TreeSet;
 import org.jetbrains.annotations.NotNull;
 import org.mustbe.consulo.csharp.lang.psi.CSharpAttribute;
 import org.mustbe.consulo.csharp.lang.psi.CSharpCallArgument;
-import org.mustbe.consulo.csharp.lang.psi.CSharpMethodDeclaration;
+import org.mustbe.consulo.csharp.lang.psi.CSharpDelegateMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpReferenceExpression;
 import org.mustbe.consulo.csharp.lang.psi.CSharpUsingListChild;
 import org.mustbe.consulo.csharp.lang.psi.impl.light.CSharpLightCallArgument;
@@ -210,7 +210,7 @@ public class UsingNamespaceFix implements HintAction, HighPriorityAction
 				public boolean value(DotNetLikeMethodDeclaration method)
 				{
 					return (method.getParent() instanceof DotNetNamespaceDeclaration || method.getParent() instanceof PsiFile) && method instanceof
-							CSharpMethodDeclaration && ((CSharpMethodDeclaration) method).isDelegate();
+							CSharpDelegateMethodDeclaration;
 				}
 			});
 		}

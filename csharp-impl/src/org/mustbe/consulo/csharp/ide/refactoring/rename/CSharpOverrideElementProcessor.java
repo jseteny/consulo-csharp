@@ -25,7 +25,6 @@ import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.csharp.lang.psi.CSharpMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.overrideSystem.OverrideUtil;
 import org.mustbe.consulo.dotnet.psi.DotNetVirtualImplementOwner;
 import com.intellij.openapi.editor.Editor;
@@ -107,7 +106,6 @@ public class CSharpOverrideElementProcessor extends RenamePsiElementProcessor
 	@Override
 	public boolean canProcessElement(@NotNull PsiElement element)
 	{
-		return element instanceof DotNetVirtualImplementOwner && !(element instanceof CSharpMethodDeclaration && ((CSharpMethodDeclaration) element)
-				.isDelegate());
+		return element instanceof DotNetVirtualImplementOwner;
 	}
 }

@@ -35,7 +35,7 @@ public class CSharpMethodUtil
 
 	public static boolean isDelegate(@Nullable PsiElement element)
 	{
-		return element instanceof CSharpMethodDeclaration && ((CSharpMethodDeclaration) element).isDelegate();
+		return element instanceof CSharpDelegateMethodDeclaration;
 	}
 
 	@NotNull

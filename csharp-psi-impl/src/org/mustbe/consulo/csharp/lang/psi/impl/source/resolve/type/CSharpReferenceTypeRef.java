@@ -3,7 +3,7 @@ package org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.type;
 import org.consulo.lombok.annotations.LazyInstance;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.csharp.lang.psi.CSharpMethodDeclaration;
+import org.mustbe.consulo.csharp.lang.psi.CSharpDelegateMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpReferenceExpression;
 import org.mustbe.consulo.csharp.lang.psi.CSharpSimpleParameterInfo;
 import org.mustbe.consulo.csharp.lang.psi.impl.CSharpTypeUtil;
@@ -54,11 +54,11 @@ public class CSharpReferenceTypeRef implements DotNetTypeRef
 		}
 	}
 
-	public static class LambdaResult extends Result<CSharpMethodDeclaration> implements CSharpLambdaResolveResult
+	public static class LambdaResult extends Result<CSharpDelegateMethodDeclaration> implements CSharpLambdaResolveResult
 	{
 		private final PsiElement myScope;
 
-		public LambdaResult(@NotNull PsiElement scope, @NotNull CSharpMethodDeclaration element, @NotNull DotNetGenericExtractor extractor)
+		public LambdaResult(@NotNull PsiElement scope, @NotNull CSharpDelegateMethodDeclaration element, @NotNull DotNetGenericExtractor extractor)
 		{
 			super(element, extractor);
 			myScope = scope;
@@ -120,7 +120,7 @@ public class CSharpReferenceTypeRef implements DotNetTypeRef
 
 		@NotNull
 		@Override
-		public CSharpMethodDeclaration getTarget()
+		public CSharpDelegateMethodDeclaration getTarget()
 		{
 			return myElement;
 		}
@@ -190,9 +190,9 @@ public class CSharpReferenceTypeRef implements DotNetTypeRef
 	public DotNetTypeResolveResult resolve(@NotNull PsiElement scope)
 	{
 		PsiElement resolve = myReferenceExpression.resolve();
-		if(resolve instanceof CSharpMethodDeclaration && ((CSharpMethodDeclaration) resolve).isDelegate())
+		if(resolve instanceof CSharpDelegateMethodDeclaration)
 		{
-			return new LambdaResult(scope, (CSharpMethodDeclaration) resolve, createExtractor(resolve));
+			return new LambdaResult(scope, (CSharpDelegateMethodDeclaration) resolve, createExtractor(resolve));
 		}
 		return new Result<PsiElement>(resolve, createExtractor(resolve));
 	}

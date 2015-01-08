@@ -140,7 +140,7 @@ public class CS0501 extends CompilerCheck<DotNetCodeBlockOwner>
 			{
 				result.addQuickFix(new CreateEmptyCodeBlockFix(element));
 			}
-			else if(element instanceof CSharpMethodDeclaration && !(((CSharpMethodDeclaration) element).isDelegate()))
+			else if(element instanceof CSharpMethodDeclaration)
 			{
 				result.addQuickFix(new CreateEmptyCodeBlockFix(element));
 				result.addQuickFix(new AddModifierFix(CSharpModifier.ABSTRACT, (DotNetModifierListOwner) element));

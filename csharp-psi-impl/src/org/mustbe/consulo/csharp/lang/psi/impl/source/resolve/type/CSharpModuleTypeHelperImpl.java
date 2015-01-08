@@ -21,7 +21,6 @@ import gnu.trove.TIntObjectHashMap;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.csharp.lang.psi.CSharpFileFactory;
 import org.mustbe.consulo.dotnet.DotNetTypes;
-import org.mustbe.consulo.dotnet.psi.DotNetLikeTypeDeclaration;
 import org.mustbe.consulo.dotnet.psi.DotNetTypeDeclaration;
 import org.mustbe.consulo.dotnet.resolve.DotNetPsiSearcher;
 import com.intellij.ProjectTopics;
@@ -61,7 +60,7 @@ public class CSharpModuleTypeHelperImpl extends CSharpModuleTypeHelper
 		if(declaration == null)
 		{
 			GlobalSearchScope searchScope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(myModule);
-			DotNetLikeTypeDeclaration type = DotNetPsiSearcher.getInstance(myModule).findType(DotNetTypes.System.Array, searchScope);
+			DotNetTypeDeclaration type = DotNetPsiSearcher.getInstance(myModule).findType(DotNetTypes.System.Array, searchScope);
 			if(type == null)
 			{
 				return null;

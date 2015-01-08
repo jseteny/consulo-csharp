@@ -2,7 +2,7 @@ package org.mustbe.consulo.csharp.lang.psi.impl.resolve.additionalMembersImpl;
 
 import org.jetbrains.annotations.NotNull;
 import org.mustbe.consulo.csharp.lang.psi.CSharpConstructorDeclaration;
-import org.mustbe.consulo.csharp.lang.psi.CSharpMethodDeclaration;
+import org.mustbe.consulo.csharp.lang.psi.CSharpDelegateMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpModifier;
 import org.mustbe.consulo.csharp.lang.psi.CSharpTypeDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.impl.light.builder.CSharpLightConstructorDeclarationBuilder;
@@ -93,13 +93,13 @@ public class StructOrGenericParameterConstructorProvider implements CSharpAdditi
 		builder.withParent(element);
 		builder.withName(name);
 
-		CSharpMethodDeclaration delegatedMethod = element.getUserData(CSharpResolveUtil.DELEGATE_METHOD_TYPE);
+		CSharpDelegateMethodDeclaration delegatedMethod = element.getUserData(CSharpResolveUtil.DELEGATE_METHOD_TYPE);
 		if(delegatedMethod != null)
 		{
 			CSharpLightParameterBuilder parameter = new CSharpLightParameterBuilder(element.getProject());
 			parameter = parameter.withName("p");
 
-			CSharpMethodDeclaration extractedMethod = GenericUnwrapTool.extract(delegatedMethod, extractor);
+			CSharpDelegateMethodDeclaration extractedMethod = GenericUnwrapTool.extract(delegatedMethod, extractor);
 			parameter = parameter.withTypeRef(new CSharpLambdaTypeRef(extractedMethod));
 			builder.addParameter(parameter);
 		}

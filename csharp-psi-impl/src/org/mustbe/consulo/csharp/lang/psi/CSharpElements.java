@@ -39,6 +39,8 @@ public interface CSharpElements
 
 	IElementType METHOD_DECLARATION = CSharpStubElements.METHOD_DECLARATION;
 
+	IElementType DELEGATE_METHOD_DECLARATION = CSharpStubElements.METHOD_DECLARATION;
+
 	IElementType CONSTRUCTOR_DECLARATION = CSharpStubElements.CONSTRUCTOR_DECLARATION;
 
 	IElementType PARAMETER_LIST = new ElementTypeAsPsiFactory("PARAMETER_LIST", CSharpLanguage.INSTANCE, CSharpParameterListImpl.class);

@@ -56,7 +56,7 @@ public class CSharpTypeRefFromNamespace extends DotNetTypeRef.Adapter
 	@Override
 	public DotNetTypeResolveResult resolve(@NotNull PsiElement element)
 	{
-		DotNetNamespaceAsElement namespace = DotNetPsiSearcher.getInstance(element.getProject()).findNamespace(myQualifiedName,
+		DotNetNamespaceAsElement namespace = DotNetPsiSearcher.getInstance(element).findNamespace(myQualifiedName,
 				element.getResolveScope());
 		if(namespace == null)
 		{

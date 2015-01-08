@@ -16,13 +16,13 @@
 
 package org.mustbe.consulo.csharp.lang.psi;
 
-import org.mustbe.consulo.dotnet.psi.DotNetMethodDeclaration;
+import org.mustbe.consulo.dotnet.psi.DotNetParameterListOwner;
 
 /**
  * @author VISTALL
  * @since 08.01.15
  */
-public interface CSharpDelegateMethodDeclaration extends DotNetMethodDeclaration, CSharpGenericConstraintOwner, CSharpSimpleLikeMethodAsElement,
+public interface CSharpDelegateMethodDeclaration extends DotNetParameterListOwner, CSharpGenericConstraintOwner, CSharpSimpleLikeMethodAsElement,
 		CSharpTypeDeclaration
 {
 }

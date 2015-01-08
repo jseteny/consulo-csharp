@@ -201,6 +201,27 @@ public class CSharpStubBuilderVisitor extends CSharpElementVisitor
 	}
 
 	@Override
+	public void visitDelegateMethodDeclaration(CSharpDelegateMethodDeclaration declaration)
+	{
+		StringBuilder builder = new StringBuilder();
+
+		processAttributeListAsLine(declaration);
+		processModifierList(builder, declaration);
+
+		builder.append("delegate ");
+		appendTypeRef(declaration, builder, declaration.getReturnTypeRef());
+		builder.append(" ");
+
+		appendValidName(builder, declaration.getName());
+		processGenericParameterList(builder, declaration);
+		processParameterList(declaration, builder, '(', ')');
+		processGenericConstraintList(builder, declaration);
+
+		builder.append(";\n");
+		myBlocks.add(new LineStubBlock(builder));
+	}
+
+	@Override
 	public void visitMethodDeclaration(CSharpMethodDeclaration declaration)
 	{
 		StringBuilder builder = new StringBuilder();
@@ -208,10 +229,6 @@ public class CSharpStubBuilderVisitor extends CSharpElementVisitor
 		processAttributeListAsLine(declaration);
 		processModifierList(builder, declaration);
 
-		if(declaration.isDelegate())
-		{
-			builder.append("delegate ");
-		}
 		appendTypeRef(declaration, builder, declaration.getReturnTypeRef());
 		builder.append(" ");
 		if(declaration.isOperator())
@@ -223,7 +240,7 @@ public class CSharpStubBuilderVisitor extends CSharpElementVisitor
 		processParameterList(declaration, builder, '(', ')');
 		processGenericConstraintList(builder, declaration);
 
-		boolean canHaveBody = !declaration.hasModifier(CSharpModifier.ABSTRACT) && !declaration.isDelegate();
+		boolean canHaveBody = !declaration.hasModifier(CSharpModifier.ABSTRACT);
 
 		if(canHaveBody)
 		{

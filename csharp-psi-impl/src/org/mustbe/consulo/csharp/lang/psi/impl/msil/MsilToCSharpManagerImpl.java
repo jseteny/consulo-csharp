@@ -21,6 +21,7 @@ import java.util.Map;
 import org.jboss.netty.util.internal.ConcurrentWeakKeyHashMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.mustbe.consulo.csharp.lang.psi.CSharpDelegateMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.type.CSharpArrayTypeRef;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.type.CSharpPointerTypeRef;
@@ -149,7 +150,7 @@ public class MsilToCSharpManagerImpl extends MsilToCSharpManager
 		PsiElement resolve = typeRef.resolve(scope).getElement();
 		if(resolve instanceof DotNetTypeDeclaration)
 		{
-			CSharpMethodDeclaration delegateMethod = wrapToDelegateMethod((DotNetTypeDeclaration) resolve, null);
+			CSharpDelegateMethodDeclaration delegateMethod = wrapToDelegateMethod((DotNetTypeDeclaration) resolve, null);
 			if(delegateMethod != null)
 			{
 				return new CSharpLazyLambdaTypeRef(scope, delegateMethod);
@@ -164,7 +165,7 @@ public class MsilToCSharpManagerImpl extends MsilToCSharpManager
 	}
 
 	@Nullable
-	public CSharpMethodDeclaration wrapToDelegateMethod(@NotNull DotNetTypeDeclaration typeDeclaration, @Nullable PsiElement parent)
+	public CSharpDelegateMethodDeclaration wrapToDelegateMethod(@NotNull DotNetTypeDeclaration typeDeclaration, @Nullable PsiElement parent)
 	{
 		if(DotNetInheritUtil.isInheritor(typeDeclaration, DotNetTypes.System.MulticastDelegate, true))
 		{

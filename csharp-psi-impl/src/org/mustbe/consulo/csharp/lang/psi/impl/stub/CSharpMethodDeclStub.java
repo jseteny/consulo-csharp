@@ -36,9 +36,8 @@ import com.intellij.util.io.StringRef;
  */
 public class CSharpMethodDeclStub extends MemberStub<CSharpMethodDeclaration>
 {
-	public static final int DELEGATE_MASK = 1 << 0;
-	public static final int EXTENSION_MASK = 1 << 1;
-	public static final int DE_CONSTRUCTOR_MASK = 1 << 2;
+	public static final int EXTENSION_MASK = 1 << 0;
+	public static final int DE_CONSTRUCTOR_MASK = 1 << 1;
 
 	private final int myOperatorIndex;
 
@@ -83,10 +82,6 @@ public class CSharpMethodDeclStub extends MemberStub<CSharpMethodDeclaration>
 	public static int getOtherModifierMask(@NotNull DotNetLikeMethodDeclaration methodDeclaration)
 	{
 		int i = 0;
-		if(methodDeclaration instanceof CSharpMethodDeclaration && ((CSharpMethodDeclaration) methodDeclaration).isDelegate())
-		{
-			i |= DELEGATE_MASK;
-		}
 		if(CSharpMethodImplUtil.isExtensionMethod(methodDeclaration))
 		{
 			i |= EXTENSION_MASK;

@@ -1,7 +1,7 @@
 package org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.type;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.csharp.lang.psi.CSharpMethodDeclaration;
+import org.mustbe.consulo.csharp.lang.psi.CSharpDelegateMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpTypeDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.impl.light.builder.CSharpLightTypeDeclarationBuilder;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.util.CSharpResolveUtil;
@@ -16,7 +16,7 @@ import com.intellij.openapi.project.Project;
 public class CSharpLambdaResolveResultUtil
 {
 	@NotNull
-	public static CSharpTypeDeclaration createTypeFromDelegate(@NotNull CSharpMethodDeclaration declaration)
+	public static CSharpTypeDeclaration createTypeFromDelegate(@NotNull CSharpDelegateMethodDeclaration declaration)
 	{
 		Project project = declaration.getProject();
 

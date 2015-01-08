@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 must-be.org
+ * Copyright 2013-2015 must-be.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,24 +23,25 @@ import org.mustbe.consulo.csharp.lang.psi.CSharpMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.CSharpMethodDeclarationImpl;
 import org.mustbe.consulo.csharp.lang.psi.impl.stub.CSharpMethodDeclStub;
 import org.mustbe.consulo.csharp.lang.psi.impl.stub.index.CSharpIndexKeys;
+import org.mustbe.consulo.dotnet.lang.psi.impl.stub.DotNetNamespaceStubUtil;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.stubs.IndexSink;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
-import com.intellij.util.BitUtil;
 import com.intellij.util.io.StringRef;
+import lombok.val;
 
 /**
  * @author VISTALL
- * @since 18.12.13.
+ * @since 08.01.15
  */
-public class CSharpMethodStubElementType extends CSharpAbstractStubElementType<CSharpMethodDeclStub, CSharpMethodDeclaration>
+public class CSharpDelegateMethodStubElementType extends CSharpAbstractStubElementType<CSharpMethodDeclStub, CSharpMethodDeclaration>
 {
-	public CSharpMethodStubElementType()
+	public CSharpDelegateMethodStubElementType()
 	{
-		super("METHOD_DECLARATION");
+		super("DELEGATE_METHOD_DECLARATION");
 	}
 
 	@NotNull
@@ -92,12 +93,12 @@ public class CSharpMethodStubElementType extends CSharpAbstractStubElementType<C
 		String name = stub.getName();
 		if(!StringUtil.isEmpty(name))
 		{
-			indexSink.occurrence(CSharpIndexKeys.METHOD_INDEX, name);
+			indexSink.occurrence(CSharpIndexKeys.TYPE_INDEX, name);
 
-			if(BitUtil.isSet(stub.getOtherModifierMask(), CSharpMethodDeclStub.EXTENSION_MASK))
-			{
-				indexSink.occurrence(CSharpIndexKeys.EXTENSION_METHOD_BY_NAME_INDEX, name);
-			}
+			val parentQName = stub.getParentQName();
+
+			DotNetNamespaceStubUtil.indexStub(indexSink, CSharpIndexKeys.MEMBER_BY_NAMESPACE_QNAME_INDEX,
+					CSharpIndexKeys.MEMBER_BY_ALL_NAMESPACE_QNAME_INDEX, parentQName, name);
 		}
 	}
 }

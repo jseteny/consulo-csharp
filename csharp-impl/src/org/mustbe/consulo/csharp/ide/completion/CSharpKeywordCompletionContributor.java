@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.csharp.ide.completion.expected.ExpectedTypeInfo;
 import org.mustbe.consulo.csharp.ide.completion.expected.ExpectedTypeRefProvider;
+import org.mustbe.consulo.csharp.lang.psi.CSharpDelegateMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpReferenceExpression;
 import org.mustbe.consulo.csharp.lang.psi.CSharpReferenceExpressionEx;
@@ -197,7 +198,7 @@ public class CSharpKeywordCompletionContributor extends CompletionContributor
 					{
 						DotNetQualifiedElement qualifiedElement = PsiTreeUtil.getParentOfType(parameters.getPosition(),
 								CSharpMethodDeclaration.class, DotNetTypeDeclaration.class);
-						if(qualifiedElement instanceof CSharpMethodDeclaration && ((CSharpMethodDeclaration) qualifiedElement).isDelegate())
+						if(qualifiedElement instanceof CSharpDelegateMethodDeclaration)
 						{
 							return true;
 						}

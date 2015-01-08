@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.csharp.ide.codeInsight.actions.RemoveModifierFix;
 import org.mustbe.consulo.csharp.ide.highlight.check.CompilerCheck;
+import org.mustbe.consulo.csharp.lang.psi.CSharpDelegateMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpModifier;
 import org.mustbe.consulo.csharp.lang.psi.CSharpTokens;
@@ -98,7 +99,7 @@ public class CS0500 extends CompilerCheck<CSharpMethodDeclaration>
 		{
 			return null;
 		}
-		if((element.hasModifier(CSharpModifier.ABSTRACT) || element.isDelegate()) && element.getCodeBlock() != null)
+		if((element.hasModifier(CSharpModifier.ABSTRACT) || element instanceof CSharpDelegateMethodDeclaration) && element.getCodeBlock() != null)
 		{
 			CompilerCheckBuilder compilerCheckBuilder = newBuilder(nameIdentifier, formatElement(element));
 			compilerCheckBuilder.addQuickFix(new RemoveCodeBlockFix(element));

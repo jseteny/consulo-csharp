@@ -9,7 +9,7 @@ import java.util.List;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.csharp.lang.psi.CSharpMethodDeclaration;
+import org.mustbe.consulo.csharp.lang.psi.CSharpDelegateMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpTokens;
 import org.mustbe.consulo.csharp.lang.psi.CSharpTypeDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.impl.light.builder.CSharpLightConversionMethodDeclarationBuilder;
@@ -132,7 +132,7 @@ public class OperatorsProvider implements CSharpAdditionalMemberProvider
 		{
 			CSharpTypeDeclaration typeDeclaration = (CSharpTypeDeclaration) element;
 
-			CSharpMethodDeclaration methodDeclaration = typeDeclaration.getUserData(CSharpResolveUtil.DELEGATE_METHOD_TYPE);
+			CSharpDelegateMethodDeclaration methodDeclaration = typeDeclaration.getUserData(CSharpResolveUtil.DELEGATE_METHOD_TYPE);
 			DotNetTypeRef selfTypeRef;
 			if(methodDeclaration != null)
 			{

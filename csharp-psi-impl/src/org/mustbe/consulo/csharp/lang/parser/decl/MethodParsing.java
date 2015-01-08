@@ -40,20 +40,21 @@ public class MethodParsing extends MemberWithBodyParsing
 		CONSTRUCTOR,
 		DECONSTRUCTOR,
 		METHOD,
+		DELEGATE_METHOD,
 		CONVERSION_METHOD
 	}
 
-	public static void parseMethodStartAtType(@NotNull CSharpBuilderWrapper builder, @NotNull PsiBuilder.Marker marker)
+	public static void parseDelegateMethodStartAtType(@NotNull CSharpBuilderWrapper builder, @NotNull PsiBuilder.Marker marker)
 	{
 		TypeInfo typeInfo = parseType(builder, STUB_SUPPORT);
 		if(typeInfo != null)
 		{
-			parseMethodStartAfterType(builder, marker, typeInfo, Target.METHOD);
+			parseMethodStartAfterType(builder, marker, typeInfo, Target.DELEGATE_METHOD);
 		}
 		else
 		{
 			builder.error("Name expected");
-			marker.done(METHOD_DECLARATION);
+			marker.done(DELEGATE_METHOD_DECLARATION);
 		}
 	}
 
@@ -142,21 +143,24 @@ public class MethodParsing extends MemberWithBodyParsing
 			GenericParameterParsing.parseGenericConstraintList(builder);
 		}
 
-		if(!expect(builder, SEMICOLON, null))
+		if(target != Target.DELEGATE_METHOD)
 		{
-			if(builder.getTokenType() == LBRACE)
+			if(!expect(builder, SEMICOLON, null))
 			{
-				StatementParsing.parse(builder);
-			}
-			else if(builder.getTokenType() == DARROW)
-			{
-				builder.advanceLexer();
-				ExpressionParsing.parse(builder);
-				expect(builder, SEMICOLON, "';' expected");
-			}
-			else
-			{
-				builder.error("';' expected");
+				if(builder.getTokenType() == LBRACE)
+				{
+					StatementParsing.parse(builder);
+				}
+				else if(builder.getTokenType() == DARROW)
+				{
+					builder.advanceLexer();
+					ExpressionParsing.parse(builder);
+					expect(builder, SEMICOLON, "';' expected");
+				}
+				else
+				{
+					builder.error("';' expected");
+				}
 			}
 		}
 
@@ -168,6 +172,9 @@ public class MethodParsing extends MemberWithBodyParsing
 				break;
 			case METHOD:
 				marker.done(METHOD_DECLARATION);
+				break;
+			case DELEGATE_METHOD:
+				marker.done(DELEGATE_METHOD_DECLARATION);
 				break;
 			case CONVERSION_METHOD:
 				marker.done(CONVERSION_METHOD_DECLARATION);

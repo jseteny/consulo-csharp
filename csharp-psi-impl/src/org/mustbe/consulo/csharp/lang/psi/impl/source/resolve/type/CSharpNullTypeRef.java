@@ -3,7 +3,7 @@ package org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.type;
 import org.jetbrains.annotations.NotNull;
 import org.mustbe.consulo.csharp.lang.psi.impl.msil.CSharpTransformer;
 import org.mustbe.consulo.dotnet.DotNetTypes;
-import org.mustbe.consulo.dotnet.psi.DotNetLikeTypeDeclaration;
+import org.mustbe.consulo.dotnet.psi.DotNetTypeDeclaration;
 import org.mustbe.consulo.dotnet.resolve.DotNetGenericExtractor;
 import org.mustbe.consulo.dotnet.resolve.DotNetPsiSearcher;
 import org.mustbe.consulo.dotnet.resolve.DotNetTypeRef;
@@ -37,7 +37,7 @@ public class CSharpNullTypeRef implements DotNetTypeRef
 	@Override
 	public DotNetTypeResolveResult resolve(@NotNull PsiElement element)
 	{
-		DotNetLikeTypeDeclaration type = DotNetPsiSearcher.getInstance(element).findType(DotNetTypes.System.Object, element.getResolveScope(),
+		DotNetTypeDeclaration type = DotNetPsiSearcher.getInstance(element).findType(DotNetTypes.System.Object, element.getResolveScope(),
 				DotNetPsiSearcher.TypeResoleKind.CLASS, CSharpTransformer.INSTANCE);
 		if(type == null)
 		{

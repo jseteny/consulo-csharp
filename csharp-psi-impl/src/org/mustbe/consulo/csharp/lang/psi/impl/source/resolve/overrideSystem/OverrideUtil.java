@@ -9,10 +9,10 @@ import java.util.ListIterator;
 import org.consulo.lombok.annotations.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.mustbe.consulo.csharp.lang.psi.CSharpArrayMethodDeclaration;
+import org.mustbe.consulo.csharp.lang.psi.CSharpDelegateMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpElementCompareUtil;
-import org.mustbe.consulo.csharp.lang.psi.CSharpMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpModifier;
-import org.mustbe.consulo.csharp.lang.psi.impl.msil.CSharpTransform;
+import org.mustbe.consulo.csharp.lang.psi.impl.msil.CSharpTransformer;
 import org.mustbe.consulo.csharp.lang.psi.impl.resolve.CSharpElementGroupImpl;
 import org.mustbe.consulo.csharp.lang.psi.impl.resolve.CSharpResolveContextUtil;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.AbstractScopeProcessor;
@@ -32,7 +32,8 @@ import org.mustbe.consulo.dotnet.psi.DotNetType;
 import org.mustbe.consulo.dotnet.psi.DotNetTypeDeclaration;
 import org.mustbe.consulo.dotnet.psi.DotNetVariable;
 import org.mustbe.consulo.dotnet.psi.DotNetVirtualImplementOwner;
-import org.mustbe.consulo.dotnet.psi.search.searches.ClassInheritorsSearch;
+import org.mustbe.consulo.dotnet.psi.search.searches.TypeInheritorsSearch;
+import org.mustbe.consulo.dotnet.psi.search.searches.TypeSearchParameters;
 import org.mustbe.consulo.dotnet.resolve.DotNetGenericExtractor;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
@@ -100,7 +101,7 @@ public class OverrideUtil
 
 			if(element instanceof DotNetVirtualImplementOwner)
 			{
-				if(element instanceof CSharpMethodDeclaration && ((CSharpMethodDeclaration) element).isDelegate())
+				if(element instanceof CSharpDelegateMethodDeclaration)
 				{
 					continue;
 				}
@@ -155,7 +156,8 @@ public class OverrideUtil
 		}
 		else if(elseElements.isEmpty())
 		{
-			return new PsiElement[]{new CSharpElementGroupImpl<PsiElement>(scopeElement.getProject(), getNameForGroup(groupElements), groupElements)};
+			return new PsiElement[]{new CSharpElementGroupImpl<PsiElement>(scopeElement.getProject(), getNameForGroup(groupElements),
+					groupElements)};
 		}
 		else if(groupElements.isEmpty())
 		{
@@ -194,10 +196,13 @@ public class OverrideUtil
 
 	public static boolean isAllowForOverride(PsiElement parent)
 	{
-		if(parent instanceof CSharpMethodDeclaration &&
-				!((CSharpMethodDeclaration) parent).isDelegate() && !((CSharpMethodDeclaration) parent).hasModifier(DotNetModifier.STATIC))
+		if(parent instanceof CSharpDelegateMethodDeclaration)
 		{
-			return true;
+			return false;
+		}
+		if(parent instanceof DotNetModifierListOwner && ((DotNetModifierListOwner) parent).hasModifier(DotNetModifier.STATIC))
+		{
+			return false;
 		}
 		return parent instanceof DotNetVirtualImplementOwner;
 	}
@@ -282,7 +287,9 @@ public class OverrideUtil
 		final GlobalSearchScope resolveScope = target.getResolveScope();
 
 		final List<DotNetVirtualImplementOwner> list = new ArrayList<DotNetVirtualImplementOwner>();
-		Query<DotNetTypeDeclaration> search = ClassInheritorsSearch.search((DotNetTypeDeclaration) parent, true, CSharpTransform.INSTANCE);
+
+		Query<DotNetTypeDeclaration> search = TypeInheritorsSearch.search(TypeSearchParameters.build((DotNetTypeDeclaration) parent).transformer
+				(CSharpTransformer.INSTANCE));
 		search.forEach(new Processor<DotNetTypeDeclaration>()
 		{
 			@Override

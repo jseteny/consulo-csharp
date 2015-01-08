@@ -130,11 +130,12 @@ public class CSharpNamespaceResolveContext implements CSharpResolveContext
 	@Override
 	public boolean processExtensionMethodGroups(@NotNull final Processor<CSharpElementGroup<CSharpMethodDeclaration>> processor)
 	{
-		return processExtensionMethodGroups(myNamespaceAsElement.getPresentableQName(), myNamespaceAsElement.getProject(), myResolveScope,
-				processor);
+		return processExtensionMethodGroups(myMsilToCSharpManager, myNamespaceAsElement.getPresentableQName(), myNamespaceAsElement.getProject(),
+				myResolveScope, processor);
 	}
 
-	public boolean processExtensionMethodGroups(@Nullable final String qName,
+	public static boolean processExtensionMethodGroups(@Nullable final MsilToCSharpManager manager,
+			@Nullable final String qName,
 			@NotNull final Project project,
 			@NotNull final GlobalSearchScope scope,
 			@NotNull final Processor<CSharpElementGroup<CSharpMethodDeclaration>> processor)
@@ -153,7 +154,7 @@ public class CSharpNamespaceResolveContext implements CSharpResolveContext
 			@Override
 			public boolean process(DotNetTypeDeclaration typeDeclaration)
 			{
-				PsiElement wrappedDeclaration = myMsilToCSharpManager.wrap(typeDeclaration);
+				PsiElement wrappedDeclaration = manager.wrap(typeDeclaration);
 
 				if(typeDeclaration instanceof CSharpTypeDeclaration && typeDeclaration.hasModifier(CSharpModifier.PARTIAL))
 				{

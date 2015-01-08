@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.mustbe.consulo.csharp.lang.psi.impl.CSharpTypeUtil;
 import org.mustbe.consulo.csharp.lang.psi.impl.msil.CSharpTransformer;
 import org.mustbe.consulo.dotnet.lang.psi.impl.stub.MsilHelper;
-import org.mustbe.consulo.dotnet.psi.DotNetLikeTypeDeclaration;
+import org.mustbe.consulo.dotnet.psi.DotNetTypeDeclaration;
 import org.mustbe.consulo.dotnet.resolve.DotNetPsiSearcher;
 import org.mustbe.consulo.dotnet.resolve.DotNetTypeRef;
 import org.mustbe.consulo.dotnet.resolve.DotNetTypeResolveResult;
@@ -44,7 +44,7 @@ public class CSharpTypeRefByQName extends DotNetTypeRef.Adapter
 	@Override
 	public DotNetTypeResolveResult resolve(@NotNull PsiElement scope)
 	{
-		DotNetLikeTypeDeclaration type = DotNetPsiSearcher.getInstance(scope).findType(myQualifiedName, scope.getResolveScope(),
+		DotNetTypeDeclaration type = DotNetPsiSearcher.getInstance(scope).findType(myQualifiedName, scope.getResolveScope(),
 				DotNetPsiSearcher.TypeResoleKind.UNKNOWN, CSharpTransformer.INSTANCE);
 
 		if(type == null)

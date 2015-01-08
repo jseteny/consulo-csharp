@@ -86,6 +86,11 @@ public class CSharpHighlightUtil
 	private static TextAttributesKey getDefaultTextAttributeKey(PsiElement element)
 	{
 		TextAttributesKey key = null;
+
+		if(element instanceof CSharpDelegateMethodDeclaration)
+		{
+			return CSharpHighlightKey.DELEGATE_METHOD_NAME;
+		}
 		if(element instanceof CSharpTypeDeclaration)
 		{
 			if(element.getUserData(CSharpResolveUtil.DELEGATE_METHOD_TYPE) != null)
@@ -120,11 +125,6 @@ public class CSharpHighlightUtil
 			if(element instanceof CSharpMethodDeclaration && ((CSharpMethodDeclaration) element).isOperator())
 			{
 				return null;
-			}
-
-			if(element instanceof CSharpMethodDeclaration && ((CSharpMethodDeclaration) element).isDelegate())
-			{
-				return CSharpHighlightKey.DELEGATE_METHOD_NAME;
 			}
 
 			if(CSharpMethodImplUtil.isExtensionWrapper(element))
@@ -179,7 +179,7 @@ public class CSharpHighlightUtil
 			{
 				element = ((CSharpReferenceExpression) owner).resolve();
 			}
-			return element instanceof CSharpMethodDeclaration && !((CSharpMethodDeclaration) element).isDelegate();
+			return element instanceof CSharpDelegateMethodDeclaration;
 		}
 		else
 		{

@@ -1057,6 +1057,10 @@ public class CSharpReferenceExpressionImplUtil
 		{
 			return new CSharpTypeRefFromNamespace(((DotNetNamespaceAsElement) resolve).getPresentableQName());
 		}
+		else if(resolve instanceof CSharpDelegateMethodDeclaration)
+		{
+			return new CSharpLambdaTypeRef((CSharpDelegateMethodDeclaration) resolve);
+		}
 		else if(resolve instanceof DotNetTypeDeclaration)
 		{
 			return new CSharpTypeRefByTypeDeclaration((DotNetTypeDeclaration) resolve, extractor);
@@ -1068,10 +1072,6 @@ public class CSharpReferenceExpressionImplUtil
 		else if(resolve instanceof DotNetGenericParameter)
 		{
 			return new CSharpTypeRefFromGenericParameter((DotNetGenericParameter) resolve);
-		}
-		else if(resolve instanceof CSharpMethodDeclaration)
-		{
-			return new CSharpLambdaTypeRef((CSharpMethodDeclaration) resolve);
 		}
 		else if(resolve instanceof DotNetVariable)
 		{

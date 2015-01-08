@@ -19,7 +19,7 @@ package org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.type;
 import org.consulo.lombok.annotations.LazyInstance;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.csharp.lang.psi.CSharpMethodDeclaration;
+import org.mustbe.consulo.csharp.lang.psi.CSharpDelegateMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpSimpleParameterInfo;
 import org.mustbe.consulo.csharp.lang.psi.impl.msil.CSharpTransformer;
 import org.mustbe.consulo.dotnet.DotNetTypes;
@@ -35,22 +35,22 @@ import com.intellij.psi.PsiElement;
  */
 public class CSharpLambdaTypeRef implements DotNetTypeRef
 {
-	private final CSharpMethodDeclaration myTarget;
+	private final CSharpDelegateMethodDeclaration myTarget;
 	private final CSharpSimpleParameterInfo[] myParameterInfos;
 	private final DotNetTypeRef myReturnType;
 	private final boolean myInheritParameters;
 
-	public CSharpLambdaTypeRef(@NotNull CSharpMethodDeclaration method)
+	public CSharpLambdaTypeRef(@NotNull CSharpDelegateMethodDeclaration method)
 	{
 		this(method, method.getParameterInfos(), method.getReturnTypeRef());
 	}
 
-	public CSharpLambdaTypeRef(@Nullable CSharpMethodDeclaration target, @NotNull CSharpSimpleParameterInfo[] parameterInfos, @NotNull DotNetTypeRef returnType)
+	public CSharpLambdaTypeRef(@Nullable CSharpDelegateMethodDeclaration target, @NotNull CSharpSimpleParameterInfo[] parameterInfos, @NotNull DotNetTypeRef returnType)
 	{
 		this(target, parameterInfos, returnType, false);
 	}
 
-	public CSharpLambdaTypeRef(@Nullable CSharpMethodDeclaration target, @NotNull CSharpSimpleParameterInfo[] parameterInfos,
+	public CSharpLambdaTypeRef(@Nullable CSharpDelegateMethodDeclaration target, @NotNull CSharpSimpleParameterInfo[] parameterInfos,
 			@NotNull DotNetTypeRef returnType, boolean inheritParameters)
 	{
 		myTarget = target;
@@ -206,7 +206,7 @@ public class CSharpLambdaTypeRef implements DotNetTypeRef
 
 			@Nullable
 			@Override
-			public CSharpMethodDeclaration getTarget()
+			public CSharpDelegateMethodDeclaration getTarget()
 			{
 				return myTarget;
 			}

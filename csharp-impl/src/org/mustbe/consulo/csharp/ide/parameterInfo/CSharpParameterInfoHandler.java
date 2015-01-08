@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.csharp.lang.psi.CSharpCallArgumentList;
 import org.mustbe.consulo.csharp.lang.psi.CSharpCallArgumentListOwner;
-import org.mustbe.consulo.csharp.lang.psi.CSharpMethodDeclaration;
+import org.mustbe.consulo.csharp.lang.psi.CSharpDelegateMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpSimpleLikeMethod;
 import org.mustbe.consulo.csharp.lang.psi.CSharpTokens;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.type.CSharpLambdaResolveResult;
@@ -178,7 +178,7 @@ public class CSharpParameterInfoHandler implements ParameterInfoHandler<PsiEleme
 			DotNetTypeResolveResult typeResolveResult = typeRef.resolve(scope);
 			if(typeResolveResult instanceof CSharpLambdaResolveResult)
 			{
-				CSharpMethodDeclaration resolve = ((CSharpLambdaResolveResult) typeResolveResult).getTarget();
+				CSharpDelegateMethodDeclaration resolve = ((CSharpLambdaResolveResult) typeResolveResult).getTarget();
 				if(resolve != null)
 				{
 					method = GenericUnwrapTool.extract(resolve, typeResolveResult.getGenericExtractor());

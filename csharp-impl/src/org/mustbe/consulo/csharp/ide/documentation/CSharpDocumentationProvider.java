@@ -241,7 +241,7 @@ public class CSharpDocumentationProvider  implements DocumentationProvider
 		{
 			String qName = s.substring(TYPE_PREFIX.length(), s.length());
 
-			return DotNetPsiSearcher.getInstance(element.getProject()).findType(qName, element.getResolveScope());
+			return DotNetPsiSearcher.getInstance(element).findType(qName, element.getResolveScope());
 		}
 		return null;
 	}

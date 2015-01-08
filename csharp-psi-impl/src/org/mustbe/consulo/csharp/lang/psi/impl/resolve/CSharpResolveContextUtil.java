@@ -98,7 +98,7 @@ public class CSharpResolveContextUtil
 	{
 		if(typeDeclaration.hasModifier(CSharpModifier.PARTIAL))
 		{
-			DotNetTypeDeclaration[] types = DotNetPsiSearcher.getInstance(typeDeclaration.getProject()).findTypes(typeDeclaration.getVmQName(),
+			DotNetTypeDeclaration[] types = DotNetPsiSearcher.getInstance(typeDeclaration).findTypes(typeDeclaration.getVmQName(),
 					resolveScope);
 
 			List<CSharpResolveContext> list = new ArrayList<CSharpResolveContext>(types.length);

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.mustbe.consulo.csharp.lang.psi.impl.msil;
+package org.mustbe.consulo.csharp.lang.psi.impl.source;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,55 +22,57 @@ import org.mustbe.consulo.csharp.lang.psi.CSharpDelegateMethodDeclaration;
 import org.mustbe.consulo.csharp.lang.psi.CSharpElementVisitor;
 import org.mustbe.consulo.csharp.lang.psi.CSharpGenericConstraint;
 import org.mustbe.consulo.csharp.lang.psi.CSharpGenericConstraintList;
-import org.mustbe.consulo.csharp.lang.psi.impl.source.CSharpTypeDeclarationImplUtil;
-import org.mustbe.consulo.csharp.lang.psi.msil.MsilToCSharpManager;
-import org.mustbe.consulo.dotnet.lang.psi.impl.stub.MsilHelper;
-import org.mustbe.consulo.dotnet.psi.DotNetInheritUtil;
+import org.mustbe.consulo.csharp.lang.psi.CSharpStubElements;
+import org.mustbe.consulo.csharp.lang.psi.impl.stub.CSharpMethodDeclStub;
 import org.mustbe.consulo.dotnet.psi.DotNetNamedElement;
 import org.mustbe.consulo.dotnet.psi.DotNetTypeDeclaration;
 import org.mustbe.consulo.dotnet.psi.DotNetTypeList;
 import org.mustbe.consulo.dotnet.resolve.DotNetTypeRef;
-import org.mustbe.consulo.msil.lang.psi.MsilMethodEntry;
-import com.intellij.navigation.ItemPresentation;
-import com.intellij.navigation.ItemPresentationProviders;
+import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.stubs.IStubElementType;
 
 /**
  * @author VISTALL
  * @since 08.01.15
  */
-public class MsilClassAsCSharpDelegateMethodDeclaration extends MsilMethodAsCSharpLikeMethodDeclaration implements CSharpDelegateMethodDeclaration
+public class CSharpDelegateMethodDeclarationImpl extends CSharpLikeMethodDeclarationImpl<CSharpMethodDeclStub> implements CSharpDelegateMethodDeclaration
 {
-	private final DotNetTypeDeclaration myDelegate;
-
-	public MsilClassAsCSharpDelegateMethodDeclaration(MsilToCSharpManager manager,
-			PsiElement parent,
-			DotNetTypeDeclaration delegate,
-			MsilMethodEntry msilMethodEntry)
+	public CSharpDelegateMethodDeclarationImpl(@NotNull ASTNode node)
 	{
-		super(manager, parent, msilMethodEntry);
-		setGenericParameterList(manager, delegate);
-		myDelegate = delegate;
+		super(node);
+	}
+
+	public CSharpDelegateMethodDeclarationImpl(@NotNull CSharpMethodDeclStub stub, @NotNull IStubElementType<? extends CSharpMethodDeclStub, ?> nodeType)
+	{
+		super(stub, nodeType);
+	}
+
+	@Override
+	public void accept(@NotNull CSharpElementVisitor visitor)
+	{
+		visitor.visitDelegateMethodDeclaration(this);
+	}
+
+	@Override
+	public boolean isEquivalentTo(PsiElement another)
+	{
+		return CSharpTypeDeclarationImplUtil.isEquivalentTo(this, another);
 	}
 
 	@Nullable
 	@Override
-	public String getPresentableParentQName()
+	public CSharpGenericConstraintList getGenericConstraintList()
 	{
-		return myDelegate.getPresentableParentQName();
+		return getStubOrPsiChild(CSharpStubElements.GENERIC_CONSTRAINT_LIST);
 	}
 
-	@Nullable
+	@NotNull
 	@Override
-	public String getPresentableQName()
+	public CSharpGenericConstraint[] getGenericConstraints()
 	{
-		return MsilHelper.cutGenericMarker(myDelegate.getPresentableQName());
-	}
-
-	@Override
-	public String getName()
-	{
-		return MsilHelper.cutGenericMarker(myDelegate.getName());
+		CSharpGenericConstraintList genericConstraintList = getGenericConstraintList();
+		return genericConstraintList == null ? CSharpGenericConstraint.EMPTY_ARRAY : genericConstraintList.getGenericConstraints();
 	}
 
 	@Override
@@ -83,27 +85,6 @@ public class MsilClassAsCSharpDelegateMethodDeclaration extends MsilMethodAsCSha
 	public PsiElement getRightBrace()
 	{
 		return null;
-	}
-
-	@Nullable
-	@Override
-	public CSharpGenericConstraintList getGenericConstraintList()
-	{
-		return myGenericConstraintList;
-	}
-
-	@NotNull
-	@Override
-	public CSharpGenericConstraint[] getGenericConstraints()
-	{
-		CSharpGenericConstraintList genericConstraintList = getGenericConstraintList();
-		return genericConstraintList == null ? CSharpGenericConstraint.EMPTY_ARRAY : genericConstraintList.getGenericConstraints();
-	}
-
-	@Override
-	public void accept(@NotNull CSharpElementVisitor visitor)
-	{
-		visitor.visitDelegateMethodDeclaration(this);
 	}
 
 	@Override
@@ -143,55 +124,37 @@ public class MsilClassAsCSharpDelegateMethodDeclaration extends MsilMethodAsCSha
 		return null;
 	}
 
+	@Nullable
 	@Override
 	public String getVmQName()
 	{
-		return myDelegate.getVmQName();
+		return null;
 	}
 
 	@Nullable
 	@Override
 	public String getVmName()
 	{
-		return myDelegate.getVmName();
-	}
-
-	@Override
-	public boolean isEquivalentTo(PsiElement another)
-	{
-		return CSharpTypeDeclarationImplUtil.isEquivalentTo(this, another);
+		return null;
 	}
 
 	@NotNull
 	@Override
 	public DotNetTypeRef[] getExtendTypeRefs()
 	{
-		return CSharpTypeDeclarationImplUtil.getExtendTypeRefs(this);
+		return new DotNetTypeRef[0];
 	}
 
 	@Override
-	public boolean isInheritor(@NotNull DotNetTypeDeclaration other, boolean deep)
+	public boolean isInheritor(@NotNull DotNetTypeDeclaration typeDeclaration, boolean b)
 	{
-		return DotNetInheritUtil.isInheritor(this, other, deep);
+		return false;
 	}
 
 	@NotNull
 	@Override
 	public DotNetNamedElement[] getMembers()
 	{
-		return DotNetNamedElement.EMPTY_ARRAY;
-	}
-
-	@Nullable
-	@Override
-	public PsiElement getNameIdentifier()
-	{
-		return null;
-	}
-
-	@Override
-	public ItemPresentation getPresentation()
-	{
-		return ItemPresentationProviders.getItemPresentation(this);
+		return new DotNetNamedElement[0];
 	}
 }

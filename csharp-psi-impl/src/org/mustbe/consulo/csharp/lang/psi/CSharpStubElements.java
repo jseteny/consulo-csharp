@@ -39,6 +39,7 @@ public interface CSharpStubElements
 	CSharpNamespaceStubElementType NAMESPACE_DECLARATION = new CSharpNamespaceStubElementType();
 	CSharpTypeStubElementType TYPE_DECLARATION = new CSharpTypeStubElementType();
 	CSharpMethodStubElementType METHOD_DECLARATION = new CSharpMethodStubElementType();
+	CSharpDelegateMethodStubElementType DELEGATE_METHOD_DECLARATION = new CSharpDelegateMethodStubElementType();
 	CSharpArrayMethodStubElementType ARRAY_METHOD_DECLARATION = new CSharpArrayMethodStubElementType();
 	CSharpConstructorStubElementType CONSTRUCTOR_DECLARATION = new CSharpConstructorStubElementType();
 	CSharpConversionMethodStubElementType CONVERSION_METHOD_DECLARATION = new CSharpConversionMethodStubElementType();

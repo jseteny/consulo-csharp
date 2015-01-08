@@ -20,7 +20,6 @@ import javax.swing.Icon;
 
 import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.csharp.lang.psi.CSharpMethodDeclaration;
 import org.mustbe.consulo.dotnet.ide.DotNetElementPresentationUtil;
 import org.mustbe.consulo.dotnet.psi.DotNetLikeMethodDeclaration;
 import org.mustbe.consulo.dotnet.psi.DotNetMethodDeclaration;
@@ -57,10 +56,6 @@ public class CSharpQualifiedElementPresentationProvider implements ItemPresentat
 			}
 			else if(myDeclaration instanceof DotNetMethodDeclaration)
 			{
-				if(myDeclaration instanceof CSharpMethodDeclaration && ((CSharpMethodDeclaration) myDeclaration).isDelegate())
-				{
-					return DotNetElementPresentationUtil.formatTypeWithGenericParameters((CSharpMethodDeclaration) myDeclaration);
-				}
 				return DotNetElementPresentationUtil.formatMethod((DotNetLikeMethodDeclaration) myDeclaration, 0);
 			}
 			return myDeclaration.getName();

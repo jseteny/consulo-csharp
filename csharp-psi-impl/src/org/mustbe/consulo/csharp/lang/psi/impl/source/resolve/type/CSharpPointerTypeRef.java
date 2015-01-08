@@ -41,7 +41,7 @@ public class CSharpPointerTypeRef extends DotNetPointerTypeRefImpl
 	@Override
 	public DotNetTypeResolveResult resolve(@NotNull PsiElement scope)
 	{
-		DotNetTypeDeclaration type = DotNetPsiSearcher.getInstance(scope.getProject()).findType(DotNetTypes.System.Object, scope.getResolveScope());
+		DotNetTypeDeclaration type = DotNetPsiSearcher.getInstance(scope).findType(DotNetTypes.System.Object, scope.getResolveScope());
 		if(type == null)
 		{
 			return DotNetTypeResolveResult.EMPTY;

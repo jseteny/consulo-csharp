@@ -38,7 +38,6 @@ import org.mustbe.consulo.csharp.lang.psi.CSharpTokenSets;
 import org.mustbe.consulo.csharp.lang.psi.CSharpTokens;
 import org.mustbe.consulo.csharp.lang.psi.CSharpUsingList;
 import org.mustbe.consulo.csharp.lang.psi.impl.CSharpTypeUtil;
-import org.mustbe.consulo.csharp.lang.psi.impl.msil.MsilToCSharpUtil;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.CSharpArrayInitializationExpressionImpl;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.CSharpNewExpressionImpl;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.CSharpReferenceExpressionImplUtil;
@@ -48,6 +47,7 @@ import org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.MemberResolveScope
 import org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.type.CSharpLambdaResolveResult;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.util.CSharpResolveUtil;
 import org.mustbe.consulo.csharp.lang.psi.impl.stub.index.TypeIndex;
+import org.mustbe.consulo.csharp.lang.psi.msil.MsilToCSharpManager;
 import org.mustbe.consulo.csharp.lang.psi.resolve.MemberByNameSelector;
 import org.mustbe.consulo.csharp.module.extension.CSharpLanguageVersion;
 import org.mustbe.consulo.csharp.module.extension.CSharpModuleUtil;
@@ -390,9 +390,10 @@ public class CSharpReferenceCompletionContributor extends CompletionContributor
 						return;
 					}
 
+					MsilToCSharpManager msilToCSharpManager = MsilToCSharpManager.getInstance(parent);
 					for(DotNetTypeDeclaration dotNetTypeDeclaration : typeDeclarations)
 					{
-						DotNetQualifiedElement wrap = (DotNetQualifiedElement) MsilToCSharpUtil.wrap(dotNetTypeDeclaration);
+						DotNetQualifiedElement wrap = (DotNetQualifiedElement) msilToCSharpManager.wrap(dotNetTypeDeclaration);
 
 						boolean insideUsingList = PsiTreeUtil.getParentOfType(parent, CSharpUsingList.class) != null;
 

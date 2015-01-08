@@ -27,15 +27,7 @@ import org.consulo.ide.eap.EarlyAccessProgramManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.csharp.ide.completion.util.LtGtInsertHandler;
-import org.mustbe.consulo.csharp.lang.psi.CSharpEventDeclaration;
-import org.mustbe.consulo.csharp.lang.psi.CSharpMacroDefine;
-import org.mustbe.consulo.csharp.lang.psi.CSharpMethodDeclaration;
-import org.mustbe.consulo.csharp.lang.psi.CSharpMethodUtil;
-import org.mustbe.consulo.csharp.lang.psi.CSharpPropertyDeclaration;
-import org.mustbe.consulo.csharp.lang.psi.CSharpTypeDeclaration;
-import org.mustbe.consulo.csharp.lang.psi.CSharpTypeDefStatement;
-import org.mustbe.consulo.csharp.lang.psi.CSharpTypeRefPresentationUtil;
-import org.mustbe.consulo.csharp.lang.psi.CSharpXXXAccessorOwner;
+import org.mustbe.consulo.csharp.lang.psi.*;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.CSharpLabeledStatementImpl;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.resolve.util.CSharpMethodImplUtil;
 import org.mustbe.consulo.dotnet.DotNetTypes;
@@ -208,67 +200,72 @@ public class CSharpLookupElementBuilderImpl extends CSharpLookupElementBuilder
 		{
 			final CSharpMethodDeclaration methodDeclaration = (CSharpMethodDeclaration) element;
 
-			if(!methodDeclaration.isDelegate())
+			String name = methodDeclaration.getName();
+			if(name == null)
 			{
-				String name = methodDeclaration.getName();
-				if(name == null)
+				return null;
+			}
+
+			CSharpMethodUtil.Result inheritGeneric = CSharpMethodUtil.isCanInheritGeneric(methodDeclaration);
+
+			String lookupString = inheritGeneric == CSharpMethodUtil.Result.CAN ? name + "<>()" : name;
+			builder = LookupElementBuilder.create(methodDeclaration, lookupString);
+			builder = builder.withIcon(IconDescriptorUpdaters.getIcon(element, Iconable.ICON_FLAG_VISIBILITY));
+
+			final DotNetTypeRef[] parameterTypes = methodDeclaration.getParameterTypeRefs();
+
+			String genericText = DotNetElementPresentationUtil.formatGenericParameters((DotNetGenericParameterListOwner) element);
+
+			String parameterText = genericText + "(" + StringUtil.join(parameterTypes, new Function<DotNetTypeRef, String>()
+			{
+				@Override
+				public String fun(DotNetTypeRef parameter)
 				{
-					return null;
+					return CSharpTypeRefPresentationUtil.buildShortText(parameter, element);
 				}
+			}, ", ") + ")";
 
-				CSharpMethodUtil.Result inheritGeneric = CSharpMethodUtil.isCanInheritGeneric(methodDeclaration);
-
-				String lookupString = inheritGeneric == CSharpMethodUtil.Result.CAN ? name + "<>()" : name;
-				builder = LookupElementBuilder.create(methodDeclaration, lookupString);
-				builder = builder.withIcon(IconDescriptorUpdaters.getIcon(element, Iconable.ICON_FLAG_VISIBILITY));
-
-				final DotNetTypeRef[] parameterTypes = methodDeclaration.getParameterTypeRefs();
-
-				String genericText = DotNetElementPresentationUtil.formatGenericParameters((DotNetGenericParameterListOwner) element);
-
-				String parameterText = genericText + "(" + StringUtil.join(parameterTypes, new Function<DotNetTypeRef, String>()
+			if(inheritGeneric == CSharpMethodUtil.Result.CAN)
+			{
+				builder = builder.withPresentableText(name);
+				builder = builder.withInsertHandler(new InsertHandler<LookupElement>()
 				{
 					@Override
-					public String fun(DotNetTypeRef parameter)
+					public void handleInsert(InsertionContext context, LookupElement item)
 					{
-						return CSharpTypeRefPresentationUtil.buildShortText(parameter, element);
+						CaretModel caretModel = context.getEditor().getCaretModel();
+						caretModel.moveToOffset(caretModel.getOffset() - 3);
 					}
-				}, ", ") + ")";
-
-				if(inheritGeneric == CSharpMethodUtil.Result.CAN)
-				{
-					builder = builder.withPresentableText(name);
-					builder = builder.withInsertHandler(new InsertHandler<LookupElement>()
-					{
-						@Override
-						public void handleInsert(InsertionContext context, LookupElement item)
-						{
-							CaretModel caretModel = context.getEditor().getCaretModel();
-							caretModel.moveToOffset(caretModel.getOffset() - 3);
-						}
-					});
-				}
-				else
-				{
-					builder = builder.withInsertHandler(ParenthesesInsertHandler.getInstance(parameterTypes.length > 0));
-				}
-
-				if(CSharpMethodImplUtil.isExtensionWrapper(methodDeclaration))
-				{
-					builder = builder.withItemTextUnderlined(true);
-				}
-				builder = builder.withTypeText(CSharpTypeRefPresentationUtil.buildShortText(methodDeclaration.getReturnTypeRef(), element));
-				builder = builder.withTailText(parameterText, false);
+				});
 			}
 			else
 			{
-				builder = LookupElementBuilder.create(methodDeclaration);
-				builder = builder.withIcon(IconDescriptorUpdaters.getIcon(element, Iconable.ICON_FLAG_VISIBILITY));
-				builder = builder.withTailText(DotNetElementPresentationUtil.formatGenericParameters((DotNetGenericParameterListOwner) element),
-						true);
-
-				builder = withGenericInsertHandler(element, builder);
+				builder = builder.withInsertHandler(ParenthesesInsertHandler.getInstance(parameterTypes.length > 0));
 			}
+
+			if(CSharpMethodImplUtil.isExtensionWrapper(methodDeclaration))
+			{
+				builder = builder.withItemTextUnderlined(true);
+			}
+			builder = builder.withTypeText(CSharpTypeRefPresentationUtil.buildShortText(methodDeclaration.getReturnTypeRef(), element));
+			builder = builder.withTailText(parameterText, false);
+		}
+		else if(element instanceof CSharpDelegateMethodDeclaration)
+		{
+			final CSharpDelegateMethodDeclaration methodDeclaration = (CSharpDelegateMethodDeclaration) element;
+
+			String name = methodDeclaration.getName();
+			if(name == null)
+			{
+				return null;
+			}
+
+			builder = LookupElementBuilder.create(methodDeclaration);
+			builder = builder.withIcon(IconDescriptorUpdaters.getIcon(element, Iconable.ICON_FLAG_VISIBILITY));
+			builder = builder.withTailText(DotNetElementPresentationUtil.formatGenericParameters((DotNetGenericParameterListOwner) element),
+					true);
+
+			builder = withGenericInsertHandler(element, builder);
 		}
 		else if(element instanceof DotNetXXXAccessor)
 		{
