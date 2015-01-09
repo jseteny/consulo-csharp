@@ -486,7 +486,7 @@ public class CSharpReferenceExpressionImplUtil
 				state = ResolveState.initial();
 				state = state.put(CSharpResolveUtil.EXTRACTOR, genericExtractor);
 				state = state.put(CSharpResolveUtil.SELECTOR, selector);
-				CSharpResolveUtil.walkChildren(scopeProcessor, typeElement, false, true, state);
+				CSharpResolveUtil.walkChildren(element, scopeProcessor, typeElement, false, true, state);
 
 				return scopeProcessor.toResolveResults();
 			case LABEL:
@@ -758,7 +758,7 @@ public class CSharpReferenceExpressionImplUtil
 
 			AbstractScopeProcessor memberProcessor = createMemberProcessor(options);
 
-			CSharpResolveUtil.walkChildren(memberProcessor, resolveElement, true, false, resolveState);
+			CSharpResolveUtil.walkChildren(element, memberProcessor, resolveElement, true, false, resolveState);
 			return memberProcessor.toResolveResults();
 		}
 
@@ -815,7 +815,7 @@ public class CSharpReferenceExpressionImplUtil
 		{
 			AbstractScopeProcessor memberProcessor = createMemberProcessor(options);
 
-			if(!CSharpResolveUtil.walkChildren(memberProcessor, target, false, true, resolveState))
+			if(!CSharpResolveUtil.walkChildren(element, memberProcessor, target, false, true, resolveState))
 			{
 				return memberProcessor.toResolveResults();
 			}
@@ -834,12 +834,12 @@ public class CSharpReferenceExpressionImplUtil
 				//PsiElement last = resolveLayers.getFirst();
 				PsiElement targetToWalkChildren = resolveLayers.getSecond();
 
-				if(!CSharpResolveUtil.walkChildren(p, targetToWalkChildren, true, false, resolveState))
+				if(!CSharpResolveUtil.walkChildren(element, p, targetToWalkChildren, true, false, resolveState))
 				{
 					return p.toResolveResults();
 				}
 
-				CSharpResolveUtil.walkUsing(p, targetToWalkChildren, null, resolveState);
+				CSharpResolveUtil.walkUsing(element, p, targetToWalkChildren, null, resolveState);
 
 				return p.toResolveResults();
 			}
@@ -866,7 +866,7 @@ public class CSharpReferenceExpressionImplUtil
 
 			AbstractScopeProcessor p = createMemberProcessor(options.additionalElements(elements));
 
-			if(!CSharpResolveUtil.walkChildren(p, targetToWalkChildren, true, true, resolveState))
+			if(!CSharpResolveUtil.walkChildren(element, p, targetToWalkChildren, true, true, resolveState))
 			{
 				return p.toResolveResults();
 			}
@@ -876,7 +876,7 @@ public class CSharpReferenceExpressionImplUtil
 				return p.toResolveResults();
 			}
 
-			CSharpResolveUtil.walkUsing(p, element, null, resolveState);
+			CSharpResolveUtil.walkUsing(element, p, element, null, resolveState);
 
 			return p.toResolveResults();
 		}

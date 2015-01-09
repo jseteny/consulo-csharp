@@ -154,7 +154,9 @@ public class CSharpResolveUtil
 		return true;
 	}
 
-	public static boolean walkUsing(@NotNull final PsiScopeProcessor processor,
+	public static boolean walkUsing(
+			@NotNull PsiElement s,
+			@NotNull final PsiScopeProcessor processor,
 			@NotNull final PsiElement entrance,
 			@Nullable PsiElement maxScope,
 			@NotNull final ResolveState state)
@@ -164,13 +166,14 @@ public class CSharpResolveUtil
 			LOGGER.error(new PsiInvalidElementAccessException(entrance));
 		}
 
-		DotNetNamespaceAsElement root = DotNetPsiSearcher.getInstance(entrance).findNamespace("", entrance.getResolveScope());
+		DotNetNamespaceAsElement root = DotNetPsiSearcher.getInstance(s).findNamespace("", entrance.getResolveScope());
 
-		assert root != null;
-
-		if(!processor.execute(root, state))
+		if(root != null)
 		{
-			return false;
+			if(!processor.execute(root, state))
+			{
+				return false;
+			}
 		}
 
 		// we cant go to use list
@@ -307,7 +310,9 @@ public class CSharpResolveUtil
 		return true;
 	}
 
-	public static boolean walkChildren(@NotNull final PsiScopeProcessor processor,
+	public static boolean walkChildren(
+			@NotNull PsiElement scope,
+			@NotNull final PsiScopeProcessor processor,
 			@NotNull final PsiElement entrance,
 			boolean walkParent,
 			boolean walkDeep,
@@ -335,7 +340,7 @@ public class CSharpResolveUtil
 					return true;
 				}
 
-				if(!walkChildren(processor, parent, walkParent, walkDeep, state))
+				if(!walkChildren(scope, processor, parent, walkParent, walkDeep, state))
 				{
 					return false;
 				}
@@ -355,7 +360,7 @@ public class CSharpResolveUtil
 
 			CSharpResolveSelector selector = state.get(SELECTOR);
 			ResolveState newState = ResolveState.initial().put(SELECTOR, selector).put(EXTRACTOR, typeResolveResult.getGenericExtractor());
-			return walkChildren(processor, element, walkParent, walkDeep, newState);
+			return walkChildren(scope, processor, element, walkParent, walkDeep, newState);
 		}
 		else if(entrance instanceof DotNetGenericParameter)
 		{
@@ -383,9 +388,9 @@ public class CSharpResolveUtil
 
 			if(walkParent)
 			{
-				DotNetNamespaceAsElement parentNamespace = DotNetPsiSearcher.getInstance(entrance).findNamespace(parentQName,
+				DotNetNamespaceAsElement parentNamespace = DotNetPsiSearcher.getInstance(scope).findNamespace(parentQName,
 						resolveScope);
-				if(parentNamespace != null && !walkChildren(processor, parentNamespace, walkParent, walkDeep, state))
+				if(parentNamespace != null && !walkChildren(scope, processor, parentNamespace, walkParent, walkDeep, state))
 				{
 					return false;
 				}
@@ -402,8 +407,8 @@ public class CSharpResolveUtil
 			state = state.put(BaseDotNetNamespaceAsElement.RESOLVE_SCOPE, resolveScope);
 			state = state.put(BaseDotNetNamespaceAsElement.FILTER, DotNetNamespaceAsElement.ChildrenFilter.NONE);
 
-			DotNetNamespaceAsElement namespace = DotNetPsiSearcher.getInstance(entrance).findNamespace(presentableQName, resolveScope);
-			if(namespace != null && !walkChildren(processor, namespace, walkParent, walkDeep, state))
+			DotNetNamespaceAsElement namespace = DotNetPsiSearcher.getInstance(scope).findNamespace(presentableQName, resolveScope);
+			if(namespace != null && !walkChildren(scope, processor, namespace, walkParent, walkDeep, state))
 			{
 				return false;
 			}

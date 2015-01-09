@@ -484,7 +484,7 @@ public class CSharpReferenceCompletionContributor extends CompletionContributor
 
 		AbstractScopeProcessor p = CSharpReferenceExpressionImplUtil.createMemberProcessor(options);
 
-		if(!CSharpResolveUtil.walkChildren(p, targetToWalkChildren, true, true, resolveState))
+		if(!CSharpResolveUtil.walkChildren(parent, p, targetToWalkChildren, true, true, resolveState))
 		{
 			return true;
 		}
@@ -494,6 +494,6 @@ public class CSharpReferenceCompletionContributor extends CompletionContributor
 			return true;
 		}
 
-		return !CSharpResolveUtil.walkUsing(p, parent, null, resolveState);
+		return !CSharpResolveUtil.walkUsing(parent, p, parent, null, resolveState);
 	}
 }

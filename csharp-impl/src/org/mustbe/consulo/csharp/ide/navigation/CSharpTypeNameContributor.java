@@ -20,11 +20,10 @@ import java.util.Collection;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.csharp.lang.psi.impl.msil.MsilToCSharpUtil;
 import org.mustbe.consulo.csharp.lang.psi.impl.stub.index.CSharpIndexKeys;
+import org.mustbe.consulo.csharp.lang.psi.impl.stub.index.TypeIndex;
 import org.mustbe.consulo.dotnet.psi.DotNetQualifiedElement;
 import org.mustbe.consulo.dotnet.psi.DotNetTypeDeclaration;
-import org.mustbe.consulo.csharp.lang.psi.impl.stub.index.TypeIndex;
 import com.intellij.navigation.ChooseByNameContributorEx;
 import com.intellij.navigation.GotoClassContributor;
 import com.intellij.navigation.NavigationItem;
@@ -55,11 +54,11 @@ public class CSharpTypeNameContributor implements ChooseByNameContributorEx, Got
 	{
 		Collection<DotNetTypeDeclaration> cSharpTypeDeclarations = TypeIndex.getInstance().get(name, project, GlobalSearchScope.allScope(project));
 		NavigationItem[] items = new NavigationItem[cSharpTypeDeclarations.size()];
-		int i = 0;
+		/*int i = 0;
 		for(DotNetTypeDeclaration t : cSharpTypeDeclarations)
 		{
 			items[i ++] = (NavigationItem) MsilToCSharpUtil.wrap(t);
-		}
+		} */
 		return items;
 	}
 
@@ -73,7 +72,7 @@ public class CSharpTypeNameContributor implements ChooseByNameContributorEx, Got
 	public void processElementsWithName(@NotNull String name, @NotNull final Processor<NavigationItem> navigationItemProcessor,
 			@NotNull FindSymbolParameters findSymbolParameters)
 	{
-		Project project = findSymbolParameters.getProject();
+	/*	Project project = findSymbolParameters.getProject();
 		IdFilter idFilter = findSymbolParameters.getIdFilter();
 		Processor<DotNetTypeDeclaration> castVar = new Processor<DotNetTypeDeclaration>()
 		{
@@ -86,7 +85,7 @@ public class CSharpTypeNameContributor implements ChooseByNameContributorEx, Got
 		GlobalSearchScope searchScope = findSymbolParameters.getSearchScope();
 
 		StubIndex.getInstance().processElements(CSharpIndexKeys.TYPE_INDEX, name, project, searchScope, idFilter, DotNetTypeDeclaration.class, castVar);
-	}
+	*/}
 
 	@Nullable
 	@Override

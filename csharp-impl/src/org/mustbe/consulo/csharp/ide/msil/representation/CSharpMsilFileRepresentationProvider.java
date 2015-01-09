@@ -27,6 +27,7 @@ import org.mustbe.consulo.csharp.ide.msil.representation.builder.CSharpStubBuild
 import org.mustbe.consulo.csharp.lang.CSharpFileType;
 import org.mustbe.consulo.csharp.lang.psi.impl.msil.MsilToCSharpUtil;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.CSharpFileImpl;
+import org.mustbe.consulo.csharp.lang.psi.msil.MsilToCSharpManager;
 import org.mustbe.consulo.dotnet.dll.vfs.builder.block.StubBlock;
 import org.mustbe.consulo.dotnet.dll.vfs.builder.block.StubBlockUtil;
 import org.mustbe.consulo.dotnet.psi.DotNetNamedElement;
@@ -70,11 +71,12 @@ public class CSharpMsilFileRepresentationProvider implements MsilFileRepresentat
 	@Override
 	public PsiFile transform(String fileName, @NotNull MsilFile msilFile)
 	{
+		MsilToCSharpManager manager = MsilToCSharpManager.getInstance(msilFile);
 		DotNetNamedElement[] msilFileMembers = msilFile.getMembers();
 		List<DotNetQualifiedElement> wrapped = new ArrayList<DotNetQualifiedElement>(msilFileMembers.length);
 		for(DotNetNamedElement member : msilFileMembers)
 		{
-			PsiElement wrap = MsilToCSharpUtil.wrap(member);
+			PsiElement wrap = manager.wrap(member);
 			if(wrap != member)  // wrapped
 			{
 				wrapped.add((DotNetQualifiedElement) wrap);

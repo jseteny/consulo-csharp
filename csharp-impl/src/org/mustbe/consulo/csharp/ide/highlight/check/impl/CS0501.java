@@ -21,15 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.csharp.ide.codeInsight.actions.AddModifierFix;
 import org.mustbe.consulo.csharp.ide.codeInsight.actions.MethodGenerateUtil;
 import org.mustbe.consulo.csharp.ide.highlight.check.CompilerCheck;
-import org.mustbe.consulo.csharp.lang.psi.CSharpArrayMethodDeclaration;
-import org.mustbe.consulo.csharp.lang.psi.CSharpConstructorDeclaration;
-import org.mustbe.consulo.csharp.lang.psi.CSharpFileFactory;
-import org.mustbe.consulo.csharp.lang.psi.CSharpMethodDeclaration;
-import org.mustbe.consulo.csharp.lang.psi.CSharpModifier;
-import org.mustbe.consulo.csharp.lang.psi.CSharpPropertyDeclaration;
-import org.mustbe.consulo.csharp.lang.psi.CSharpPropertyUtil;
-import org.mustbe.consulo.csharp.lang.psi.CSharpSimpleLikeMethodAsElement;
-import org.mustbe.consulo.csharp.lang.psi.CSharpTokens;
+import org.mustbe.consulo.csharp.lang.psi.*;
 import org.mustbe.consulo.csharp.module.extension.CSharpLanguageVersion;
 import org.mustbe.consulo.dotnet.psi.DotNetCodeBlockOwner;
 import org.mustbe.consulo.dotnet.psi.DotNetModifier;
@@ -166,6 +158,10 @@ public class CS0501 extends CompilerCheck<DotNetCodeBlockOwner>
 			return true;
 		}
 
+		if(owner instanceof CSharpDelegateMethodDeclaration)
+		{
+			return true;
+		}
 		if(owner instanceof DotNetXXXAccessor)
 		{
 			PsiElement parent = owner.getParent();
@@ -175,13 +171,6 @@ public class CS0501 extends CompilerCheck<DotNetCodeBlockOwner>
 			}
 		}
 
-		if(declaration instanceof CSharpMethodDeclaration)
-		{
-			if(((CSharpMethodDeclaration) declaration).isDelegate())
-			{
-				return true;
-			}
-		}
 		return false;
 	}
 }

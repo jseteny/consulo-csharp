@@ -237,7 +237,7 @@ public class OverrideUtil
 			state = state.put(CSharpResolveUtil.SELECTOR, new MemberByNameSelector(name));
 		}
 
-		CSharpResolveUtil.walkChildren(processor, parent, false, true, state);
+		CSharpResolveUtil.walkChildren(target, processor, parent, false, true, state);
 
 		List<DotNetVirtualImplementOwner> results = overrideProcessor.getResults();
 

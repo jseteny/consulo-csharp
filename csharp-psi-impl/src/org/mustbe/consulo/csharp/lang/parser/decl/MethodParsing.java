@@ -163,6 +163,10 @@ public class MethodParsing extends MemberWithBodyParsing
 				}
 			}
 		}
+		else
+		{
+			expect(builder, SEMICOLON, "';' expected");
+		}
 
 		switch(target)
 		{

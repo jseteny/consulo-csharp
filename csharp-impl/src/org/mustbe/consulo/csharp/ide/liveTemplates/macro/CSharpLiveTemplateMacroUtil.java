@@ -57,7 +57,7 @@ public class CSharpLiveTemplateMacroUtil
 				ExecuteTarget.EVENT
 		});
 
-		CSharpResolveUtil.walkChildren(processor, resolveLayers.getSecond(), true, false, ResolveState.initial());
+		CSharpResolveUtil.walkChildren(scope, processor, resolveLayers.getSecond(), true, false, ResolveState.initial());
 
 		ResolveResult[] resolveResults = processor.toResolveResults();
 		List<DotNetVariable> list = new ArrayList<DotNetVariable>(resolveResults.length);

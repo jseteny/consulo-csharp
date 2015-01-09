@@ -60,11 +60,13 @@ public class CSharpSearchUtil
 			return null;
 		}
 		DotNetGenericExtractor genericExtractor = typeResolveResult.getGenericExtractor();
-		return findPropertyByName(name, resolvedElement, parentQName, genericExtractor);
+		return findPropertyByName(scope, name, resolvedElement, parentQName, genericExtractor);
 	}
 
 	@Nullable
-	public static DotNetPropertyDeclaration findPropertyByName(@NotNull final String name,
+	public static DotNetPropertyDeclaration findPropertyByName(
+			@NotNull PsiElement scope,
+			@NotNull final String name,
 			@NotNull PsiElement owner,
 			@Nullable String parentQName,
 			@NotNull DotNetGenericExtractor extractor)
@@ -76,7 +78,7 @@ public class CSharpSearchUtil
 		state = state.put(CSharpResolveUtil.EXTRACTOR, extractor);
 		state = state.put(CSharpResolveUtil.SELECTOR, new MemberByNameSelector(name));
 
-		CSharpResolveUtil.walkChildren(memberResolveScopeProcessor, owner, false, true, state);
+		CSharpResolveUtil.walkChildren(scope, memberResolveScopeProcessor, owner, false, true, state);
 		for(PsiElement element : memberResolveScopeProcessor.toPsiElements())
 		{
 			if(isMyElement(element, parentQName))
@@ -88,7 +90,8 @@ public class CSharpSearchUtil
 	}
 
 	@Nullable
-	public static DotNetMethodDeclaration findMethodByName(@NotNull final String name,
+	public static DotNetMethodDeclaration findMethodByName(
+			@NotNull final String name,
 			@Nullable String parentQName,
 			@NotNull DotNetTypeRef typeRef,
 			@NotNull PsiElement scope)
@@ -99,11 +102,13 @@ public class CSharpSearchUtil
 		{
 			return null;
 		}
-		return findMethodByName(name, resolvedElement, parentQName, typeResolveResult.getGenericExtractor());
+		return findMethodByName(scope, name, resolvedElement, parentQName, typeResolveResult.getGenericExtractor());
 	}
 
 	@Nullable
-	public static DotNetMethodDeclaration findMethodByName(@NotNull final String name,
+	public static DotNetMethodDeclaration findMethodByName(
+			@NotNull PsiElement scope,
+			@NotNull final String name,
 			@NotNull PsiElement owner,
 			@Nullable String parentQName,
 			@NotNull DotNetGenericExtractor extractor)
@@ -136,7 +141,7 @@ public class CSharpSearchUtil
 		state = state.put(CSharpResolveUtil.EXTRACTOR, extractor);
 		state = state.put(CSharpResolveUtil.SELECTOR, new MemberByNameSelector(name));
 
-		CSharpResolveUtil.walkChildren(memberResolveScopeProcessor, owner, false, true, state);
+		CSharpResolveUtil.walkChildren(scope, memberResolveScopeProcessor, owner, false, true, state);
 
 		PsiElement[] psiElements = memberResolveScopeProcessor.toPsiElements();
 
