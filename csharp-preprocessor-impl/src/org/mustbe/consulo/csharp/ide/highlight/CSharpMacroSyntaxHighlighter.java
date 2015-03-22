@@ -37,14 +37,14 @@ public class CSharpMacroSyntaxHighlighter extends SyntaxHighlighterBase
 
 	static
 	{
-		safeMap(ourKeys, CSharpMacroTokens.MACRO_DEFINE_KEYWORD, CSharpHighlightKey.MACRO_KEYWORD);
-		safeMap(ourKeys, CSharpMacroTokens.MACRO_UNDEF_KEYWORD, CSharpHighlightKey.MACRO_KEYWORD);
-		safeMap(ourKeys, CSharpMacroTokens.MACRO_IF_KEYWORD, CSharpHighlightKey.MACRO_KEYWORD);
-		safeMap(ourKeys, CSharpMacroTokens.MACRO_ELSE_KEYWORD, CSharpHighlightKey.MACRO_KEYWORD);
-		safeMap(ourKeys, CSharpMacroTokens.MACRO_ELIF_KEYWORD, CSharpHighlightKey.MACRO_KEYWORD);
-		safeMap(ourKeys, CSharpMacroTokens.MACRO_REGION_KEYWORD, CSharpHighlightKey.MACRO_KEYWORD);
-		safeMap(ourKeys, CSharpMacroTokens.MACRO_ENDIF_KEYWORD, CSharpHighlightKey.MACRO_KEYWORD);
-		safeMap(ourKeys, CSharpMacroTokens.MACRO_ENDREGION_KEYWORD, CSharpHighlightKey.MACRO_KEYWORD);
+		safeMap(ourKeys, CSharpMacroTokens.DEFINE_KEYWORD, CSharpPreprocessorHighlightKey.MACRO_KEYWORD);
+		safeMap(ourKeys, CSharpMacroTokens.UNDEF_KEYWORD, CSharpPreprocessorHighlightKey.MACRO_KEYWORD);
+		safeMap(ourKeys, CSharpMacroTokens.IF_KEYWORD, CSharpPreprocessorHighlightKey.MACRO_KEYWORD);
+		safeMap(ourKeys, CSharpMacroTokens.ELSE_KEYWORD, CSharpPreprocessorHighlightKey.MACRO_KEYWORD);
+		safeMap(ourKeys, CSharpMacroTokens.ELIF_KEYWORD, CSharpPreprocessorHighlightKey.MACRO_KEYWORD);
+		safeMap(ourKeys, CSharpMacroTokens.REGION_KEYWORD, CSharpPreprocessorHighlightKey.MACRO_KEYWORD);
+		safeMap(ourKeys, CSharpMacroTokens.ENDIF_KEYWORD, CSharpPreprocessorHighlightKey.MACRO_KEYWORD);
+		safeMap(ourKeys, CSharpMacroTokens.ENDREGION_KEYWORD, CSharpPreprocessorHighlightKey.MACRO_KEYWORD);
 	}
 
 	@NotNull

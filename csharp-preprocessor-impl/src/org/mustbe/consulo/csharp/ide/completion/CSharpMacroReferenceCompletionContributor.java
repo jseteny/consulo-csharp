@@ -18,11 +18,12 @@ package org.mustbe.consulo.csharp.ide.completion;
 
 import static com.intellij.patterns.StandardPatterns.psiElement;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.csharp.ide.CSharpLookupElementBuilder;
 import org.mustbe.consulo.csharp.lang.psi.CSharpMacroDefine;
 import org.mustbe.consulo.csharp.lang.psi.CSharpMacroTokens;
 import org.mustbe.consulo.csharp.lang.psi.impl.light.CSharpLightMacroDefine;
@@ -34,8 +35,10 @@ import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
+import com.intellij.ide.IconDescriptorUpdaters;
 import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.util.Iconable;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.containers.HashMap;
 
@@ -84,9 +87,21 @@ public class CSharpMacroReferenceCompletionContributor extends CompletionContrib
 				}
 
 
-				LookupElement[] lookupElements = CSharpLookupElementBuilder.buildToLookupElements(map.values());
-				result.addAllElements(Arrays.asList(lookupElements));
+				result.addAllElements(buildToLookupElements(map.values()));
 			}
 		});
+	}
+
+	@NotNull
+	private Collection<LookupElementBuilder> buildToLookupElements(Collection<CSharpMacroDefine> defines)
+	{
+		List<LookupElementBuilder> list = new ArrayList<LookupElementBuilder>(defines.size());
+		for(CSharpMacroDefine define : defines)
+		{
+			LookupElementBuilder builder = LookupElementBuilder.create(define);
+			builder = builder.withIcon(IconDescriptorUpdaters.getIcon(define, Iconable.ICON_FLAG_VISIBILITY));
+			list.add(builder);
+		}
+		return list;
 	}
 }

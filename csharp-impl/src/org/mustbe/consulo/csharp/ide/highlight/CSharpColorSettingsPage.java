@@ -47,8 +47,8 @@ public class CSharpColorSettingsPage implements ColorSettingsPage, DisplayPriori
 				new AttributesDescriptor("Line comment", CSharpHighlightKey.LINE_COMMENT),
 				new AttributesDescriptor("Keyword", CSharpHighlightKey.KEYWORD),
 				new AttributesDescriptor("Context keyword", CSharpHighlightKey.SOFT_KEYWORD),
-				new AttributesDescriptor("Preprocessor keyword", CSharpHighlightKey.MACRO_KEYWORD),
-				new AttributesDescriptor("Preprocessor variable", CSharpHighlightKey.MACRO_VARIABLE),
+				new AttributesDescriptor("Preprocessor keyword", CSharpPreprocessorHighlightKey.MACRO_KEYWORD),
+				new AttributesDescriptor("Preprocessor variable", CSharpPreprocessorHighlightKey.MACRO_VARIABLE),
 				new AttributesDescriptor("Disabled preprocessor block", CSharpHighlightKey.DISABLED_BLOCK),
 				new AttributesDescriptor("String", CSharpHighlightKey.STRING),
 				new AttributesDescriptor("Number", CSharpHighlightKey.NUMBER),
@@ -77,8 +77,8 @@ public class CSharpColorSettingsPage implements ColorSettingsPage, DisplayPriori
 			put("generic_parameter_name", CSharpHighlightKey.GENERIC_PARAMETER_NAME);
 			put("delegate_method_name", CSharpHighlightKey.DELEGATE_METHOD_NAME);
 			put("soft_keyword", CSharpHighlightKey.SOFT_KEYWORD);
-			put("macro_keyword", CSharpHighlightKey.MACRO_KEYWORD);
-			put("macro_variable", CSharpHighlightKey.MACRO_VARIABLE);
+			put("macro_keyword", CSharpPreprocessorHighlightKey.MACRO_KEYWORD);
+			put("macro_variable", CSharpPreprocessorHighlightKey.MACRO_VARIABLE);
 			put("disabled_block", CSharpHighlightKey.DISABLED_BLOCK);
 			put("extension_call", CSharpHighlightKey.EXTENSION_METHOD);
 			put("static_call", CSharpHighlightKey.STATIC_METHOD);

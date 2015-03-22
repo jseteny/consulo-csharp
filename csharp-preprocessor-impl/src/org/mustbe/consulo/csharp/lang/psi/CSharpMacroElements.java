@@ -2,8 +2,9 @@ package org.mustbe.consulo.csharp.lang.psi;
 
 import org.mustbe.consulo.csharp.lang.CSharpMacroLanguage;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.*;
-import com.intellij.psi.tree.IElementType;
+import org.mustbe.consulo.csharp.lang.psi.impl.stub.elementTypes.CSharpMacroStubElementType;
 import com.intellij.psi.tree.ElementTypeAsPsiFactory;
+import com.intellij.psi.tree.IElementType;
 
 /**
  * @author VISTALL
@@ -11,6 +12,7 @@ import com.intellij.psi.tree.ElementTypeAsPsiFactory;
  */
 public interface CSharpMacroElements
 {
+	CSharpMacroStubElementType MACRO_FILE = new CSharpMacroStubElementType();
 
 	IElementType MACRO_DEFINE = new ElementTypeAsPsiFactory("MACRO_DEFINE", CSharpMacroLanguage.INSTANCE, CSharpMacroDefineImpl.class);
 

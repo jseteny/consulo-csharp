@@ -137,10 +137,6 @@ public class CSharpHighlightUtil
 						.INSTANCE_METHOD;
 			}
 		}
-		else if(element instanceof CSharpMacroDefine)
-		{
-			key = CSharpHighlightKey.MACRO_VARIABLE;
-		}
 		else if(element instanceof CSharpLocalVariable)
 		{
 			DotNetQualifiedElement owner = element.getUserData(CSharpResolveUtil.ACCESSOR_VALUE_VARIABLE_OWNER);

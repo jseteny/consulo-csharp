@@ -26,25 +26,29 @@ import com.intellij.psi.tree.IElementType;
  */
 public interface CSharpMacroTokens extends TokenType
 {
-	IElementType MACRO_IF_KEYWORD = new IElementType("MACRO_IF_KEYWORD", CSharpMacroLanguage.INSTANCE);
+	IElementType IF_KEYWORD = new IElementType("IF_KEYWORD", CSharpMacroLanguage.INSTANCE);
 
-	IElementType MACRO_ELSE_KEYWORD = new IElementType("MACRO_IF_KEYWORD", CSharpMacroLanguage.INSTANCE);
+	IElementType ELSE_KEYWORD = new IElementType("IF_KEYWORD", CSharpMacroLanguage.INSTANCE);
 
-	IElementType MACRO_ELIF_KEYWORD = new IElementType("MACRO_ELIF_KEYWORD", CSharpMacroLanguage.INSTANCE);
+	IElementType ELIF_KEYWORD = new IElementType("ELIF_KEYWORD", CSharpMacroLanguage.INSTANCE);
 
-	IElementType MACRO_ENDIF_KEYWORD = new IElementType("MACRO_ENDIF_KEYWORD", CSharpMacroLanguage.INSTANCE);
+	IElementType ENDIF_KEYWORD = new IElementType("ENDIF_KEYWORD", CSharpMacroLanguage.INSTANCE);
 
-	IElementType MACRO_REGION_KEYWORD = new IElementType("MACRO_REGION_KEYWORD", CSharpMacroLanguage.INSTANCE);
+	IElementType REGION_KEYWORD = new IElementType("REGION_KEYWORD", CSharpMacroLanguage.INSTANCE);
 
-	IElementType MACRO_ENDREGION_KEYWORD = new IElementType("MACRO_ENDREGION_KEYWORD", CSharpMacroLanguage.INSTANCE);
+	IElementType ENDREGION_KEYWORD = new IElementType("ENDREGION_KEYWORD", CSharpMacroLanguage.INSTANCE);
 
-	IElementType MACRO_DEFINE_KEYWORD = new IElementType("MACRO_DEFINE_KEYWORD", CSharpMacroLanguage.INSTANCE);
+	IElementType DEFINE_KEYWORD = new IElementType("DEFINE_KEYWORD", CSharpMacroLanguage.INSTANCE);
 
-	IElementType MACRO_UNDEF_KEYWORD = new IElementType("MACRO_UNDEF_KEYWORD", CSharpMacroLanguage.INSTANCE);
+	IElementType UNDEF_KEYWORD = new IElementType("UNDEF_KEYWORD", CSharpMacroLanguage.INSTANCE);
 
-	IElementType MACRO_VALUE = new IElementType("MACRO_VALUE", CSharpMacroLanguage.INSTANCE);
+	IElementType PRAGMA_KEYWORD = new IElementType("PRAGMA_KEYWORD", CSharpMacroLanguage.INSTANCE);
 
-	IElementType MACRO_STOP = new IElementType("MACRO_STOP", CSharpMacroLanguage.INSTANCE);
+	IElementType VALUE = new IElementType("VALUE", CSharpMacroLanguage.INSTANCE);
+
+	IElementType DIRECTIVE_START = new IElementType("DIRECTIVE_START", CSharpMacroLanguage.INSTANCE);
+
+	IElementType DIRECTIVE_END = new IElementType("DIRECTIVE_END", CSharpMacroLanguage.INSTANCE);
 
 	IElementType IDENTIFIER = new IElementType("IDENTIFIER", CSharpMacroLanguage.INSTANCE);
 

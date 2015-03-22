@@ -20,8 +20,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.csharp.lang.lexer.CSharpMacroLexer;
 import org.mustbe.consulo.csharp.lang.parser.CSharpMacroParser;
+import org.mustbe.consulo.csharp.lang.psi.CSharpMacroElements;
 import org.mustbe.consulo.csharp.lang.psi.CSharpMacroTokens;
-import org.mustbe.consulo.csharp.lang.psi.CSharpStubElements;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.CSharpMacroFileImpl;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
@@ -60,7 +60,7 @@ public class CSharpMacroParserDefinition implements ParserDefinition
 	@Override
 	public IFileElementType getFileNodeType()
 	{
-		return CSharpStubElements.MACRO_FILE;
+		return CSharpMacroElements.MACRO_FILE;
 	}
 
 	@NotNull

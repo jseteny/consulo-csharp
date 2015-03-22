@@ -51,10 +51,6 @@ public interface CSharpHighlightKey
 			DefaultLanguageHighlighterColors.INSTANCE_METHOD);
 	TextAttributesKey PARAMETER = TextAttributesKey.createTextAttributesKey(CSharpLanguage.INSTANCE, DefaultLanguageHighlighterColors.PARAMETER);
 	TextAttributesKey KEYWORD = TextAttributesKey.createTextAttributesKey(CSharpLanguage.INSTANCE, DefaultLanguageHighlighterColors.KEYWORD);
-	TextAttributesKey MACRO_KEYWORD = TextAttributesKey.createTextAttributesKey(CSharpLanguage.INSTANCE,
-			DefaultLanguageHighlighterColors.MACRO_KEYWORD);
-	TextAttributesKey MACRO_VARIABLE = TextAttributesKey.createTextAttributesKey(CSharpLanguage.INSTANCE,
-			DefaultLanguageHighlighterColors.INSTANCE_FIELD);
 	TextAttributesKey NUMBER = TextAttributesKey.createTextAttributesKey(CSharpLanguage.INSTANCE, DefaultLanguageHighlighterColors.NUMBER);
 	TextAttributesKey SOFT_KEYWORD = TextAttributesKey.createTextAttributesKey(CSharpLanguage.INSTANCE, KEYWORD);
 	TextAttributesKey BLOCK_COMMENT = TextAttributesKey.createTextAttributesKey(CSharpLanguage.INSTANCE,

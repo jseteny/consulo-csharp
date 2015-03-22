@@ -17,10 +17,10 @@
 package org.mustbe.consulo.csharp.lang.parser.macro;
 
 import org.jetbrains.annotations.Nullable;
-import org.mustbe.consulo.csharp.lang.parser.SharedParsingHelpers;
 import org.mustbe.consulo.csharp.lang.psi.CSharpMacroElements;
 import org.mustbe.consulo.csharp.lang.psi.CSharpMacroTokens;
 import com.intellij.lang.PsiBuilder;
+import com.intellij.lang.PsiBuilderUtil;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
 import lombok.val;
@@ -181,7 +181,7 @@ public class MacroExpressionParsing implements CSharpMacroTokens, CSharpMacroEle
 				builder.error("Expression expected");
 			}
 
-			if(!SharedParsingHelpers.expect(builder, RPAR, null))
+			if(!PsiBuilderUtil.expect(builder, RPAR))
 			{
 				if(inner != null)
 				{
