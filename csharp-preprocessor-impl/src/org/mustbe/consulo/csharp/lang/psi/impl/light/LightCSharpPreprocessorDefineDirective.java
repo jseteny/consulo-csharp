@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.csharp.lang.CSharpMacroLanguage;
-import org.mustbe.consulo.csharp.lang.psi.CSharpMacroDefine;
+import org.mustbe.consulo.csharp.lang.psi.CSharpPreprocessorDefineDirective;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.roots.ui.configuration.ProjectSettingsService;
 import com.intellij.psi.PsiElement;
@@ -32,13 +32,13 @@ import com.intellij.util.IncorrectOperationException;
  * @author VISTALL
  * @since 26.01.14
  */
-public class CSharpLightMacroDefine extends LightElement implements CSharpMacroDefine
+public class LightCSharpPreprocessorDefineDirective extends LightElement implements CSharpPreprocessorDefineDirective
 {
 	@NotNull
 	private final Module myModule;
 	private String myVariableName;
 
-	public CSharpLightMacroDefine(@NotNull Module module, @NotNull String variableName)
+	public LightCSharpPreprocessorDefineDirective(@NotNull Module module, @NotNull String variableName)
 	{
 		super(PsiManager.getInstance(module.getProject()), CSharpMacroLanguage.INSTANCE);
 		myModule = module;

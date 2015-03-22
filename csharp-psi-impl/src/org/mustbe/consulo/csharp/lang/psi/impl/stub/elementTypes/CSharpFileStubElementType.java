@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import org.mustbe.consulo.csharp.lang.CSharpLanguage;
 import org.mustbe.consulo.csharp.lang.CSharpLanguageVersionWrapper;
 import org.mustbe.consulo.csharp.lang.CSharpMacroLanguage;
-import org.mustbe.consulo.csharp.lang.psi.CSharpMacroDefine;
+import org.mustbe.consulo.csharp.lang.psi.CSharpPreprocessorDefineDirective;
 import org.mustbe.consulo.csharp.lang.psi.CSharpMacroRecursiveElementVisitor;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.CSharpFileImpl;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.CSharpMacroBlockStartImpl;
@@ -135,17 +135,17 @@ public class CSharpFileStubElementType extends IStubFileElementType<CSharpFileSt
 		templateFile.accept(new CSharpMacroRecursiveElementVisitor()
 		{
 			@Override
-			public void visitMacroDefine(CSharpMacroDefine def)
+			public void visitMacroDefine(CSharpPreprocessorDefineDirective directive)
 			{
 				List<String> redefs = redefined.get();
 				if(redefs == null)
 				{
 					redefined.set(redefs = new ArrayList<String>(baseVariables));
 				}
-				String name = def.getName();
+				String name = directive.getName();
 				if(name != null)
 				{
-					if(def.isUnDef())
+					if(directive.isUnDef())
 					{
 						redefs.remove(name) ;
 					}

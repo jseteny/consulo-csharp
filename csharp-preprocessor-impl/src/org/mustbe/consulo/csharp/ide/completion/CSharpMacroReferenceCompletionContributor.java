@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
-import org.mustbe.consulo.csharp.lang.psi.CSharpMacroDefine;
+import org.mustbe.consulo.csharp.lang.psi.CSharpPreprocessorDefineDirective;
 import org.mustbe.consulo.csharp.lang.psi.CSharpMacroTokens;
-import org.mustbe.consulo.csharp.lang.psi.impl.light.CSharpLightMacroDefine;
+import org.mustbe.consulo.csharp.lang.psi.impl.light.LightCSharpPreprocessorDefineDirective;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.CSharpMacroFileImpl;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.CSharpMacroReferenceExpressionImpl;
 import org.mustbe.consulo.dotnet.module.extension.DotNetSimpleModuleExtension;
@@ -57,18 +57,18 @@ public class CSharpMacroReferenceCompletionContributor extends CompletionContrib
 			protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result)
 			{
 				CSharpMacroReferenceExpressionImpl expression = (CSharpMacroReferenceExpressionImpl) parameters.getPosition().getParent();
-				Map<String, CSharpMacroDefine> map = new HashMap<String, CSharpMacroDefine>();
+				Map<String, CSharpPreprocessorDefineDirective> map = new HashMap<String, CSharpPreprocessorDefineDirective>();
 
 				DotNetSimpleModuleExtension<?> extension = ModuleUtilCore.getExtension(expression, DotNetSimpleModuleExtension.class);
 				if(extension != null)
 				{
 					for(String varName : extension.getVariables())
 					{
-						map.put(varName, new CSharpLightMacroDefine(extension.getModule(), varName));
+						map.put(varName, new LightCSharpPreprocessorDefineDirective(extension.getModule(), varName));
 					}
 				}
 
-				for(CSharpMacroDefine macroDefine : ((CSharpMacroFileImpl) expression.getContainingFile()).getDefines())
+				for(CSharpPreprocessorDefineDirective macroDefine : ((CSharpMacroFileImpl) expression.getContainingFile()).getDefines())
 				{
 					String name = macroDefine.getName();
 					if(name == null)
@@ -93,10 +93,10 @@ public class CSharpMacroReferenceCompletionContributor extends CompletionContrib
 	}
 
 	@NotNull
-	private Collection<LookupElementBuilder> buildToLookupElements(Collection<CSharpMacroDefine> defines)
+	private Collection<LookupElementBuilder> buildToLookupElements(Collection<CSharpPreprocessorDefineDirective> defines)
 	{
 		List<LookupElementBuilder> list = new ArrayList<LookupElementBuilder>(defines.size());
-		for(CSharpMacroDefine define : defines)
+		for(CSharpPreprocessorDefineDirective define : defines)
 		{
 			LookupElementBuilder builder = LookupElementBuilder.create(define);
 			builder = builder.withIcon(IconDescriptorUpdaters.getIcon(define, Iconable.ICON_FLAG_VISIBILITY));

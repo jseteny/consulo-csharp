@@ -19,7 +19,7 @@ package org.mustbe.consulo.csharp.ide.highlight;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.csharp.lang.psi.CSharpFile;
-import org.mustbe.consulo.csharp.lang.psi.CSharpMacroDefine;
+import org.mustbe.consulo.csharp.lang.psi.CSharpPreprocessorDefineDirective;
 import org.mustbe.consulo.csharp.lang.psi.CSharpMacroElementVisitor;
 import org.mustbe.consulo.csharp.lang.psi.impl.source.CSharpMacroReferenceExpressionImpl;
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
@@ -69,18 +69,18 @@ public class CSharpMacroHighlightVisitor extends CSharpMacroElementVisitor imple
 	}
 
 	@Override
-	public void visitMacroDefine(CSharpMacroDefine cSharpMacroDefine)
+	public void visitMacroDefine(CSharpPreprocessorDefineDirective directive)
 	{
-		if(cSharpMacroDefine.isUnDef())
+		if(directive.isUnDef())
 		{
 			return;
 		}
-		highlightNamed(cSharpMacroDefine, cSharpMacroDefine.getNameIdentifier());
+		highlightNamed(directive, directive.getNameIdentifier());
 	}
 
 	public void highlightNamed(@NotNull PsiElement element, @Nullable PsiElement target)
 	{
-		if(element instanceof CSharpMacroDefine)
+		if(element instanceof CSharpPreprocessorDefineDirective)
 		{
 			myHighlightInfoHolder.add(HighlightInfo.newHighlightInfo(HighlightInfoType.INFORMATION).textAttributes(CSharpPreprocessorHighlightKey
 					.MACRO_VARIABLE).range(ObjectUtils.notNull(target, element)).create());

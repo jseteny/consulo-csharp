@@ -21,7 +21,7 @@ import org.mustbe.consulo.csharp.lang.psi.CSharpMacroTokens;
 
 IDENTIFIER=[:jletter:] [:jletterdigit:]*
 
-MACRO_WHITE_SPACE=[ \t\f]+
+MACRO_WHITE_SPACE=[ \t\f\n]+
 
 CHARP_FRAGMENT=([^\r\n\u2028\u2029\u000B\u000C\u0085!(\#)])+
 
@@ -89,4 +89,6 @@ MACRO_VALUE_UNTIL_NEW_LINE=([^\r\n\u2028\u2029\u000B\u000C\u0085!(\n)])+
 	"#"                  { yybegin(WAIT_DIRECTIVE);return CSharpMacroTokens.DIRECTIVE_START; }
 
 	{CHARP_FRAGMENT}     { return CSharpMacroTokens.CSHARP_FRAGMENT; }
+
+	{MACRO_WHITE_SPACE}  { return CSharpMacroTokens.CSHARP_FRAGMENT; }
 }

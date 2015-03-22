@@ -14,17 +14,28 @@ public interface CSharpMacroElements
 {
 	CSharpMacroStubElementType MACRO_FILE = new CSharpMacroStubElementType();
 
-	IElementType MACRO_DEFINE = new ElementTypeAsPsiFactory("MACRO_DEFINE", CSharpMacroLanguage.INSTANCE, CSharpMacroDefineImpl.class);
+	IElementType REGION_DIRECTIVE = new ElementTypeAsPsiFactory("REGION_DIRECTIVE", CSharpMacroLanguage.INSTANCE,
+			CSharpPreprocessorRegionDirectiveImpl.class);
 
-	IElementType MACRO_UNDEF = new ElementTypeAsPsiFactory("MACRO_UNDEF", CSharpMacroLanguage.INSTANCE, CSharpMacroDefineImpl.class);
+	IElementType ENDREGION_DIRECTIVE = new ElementTypeAsPsiFactory("ENDREGION_DIRECTIVE", CSharpMacroLanguage.INSTANCE,
+			CSharpPreprocessorRegionDirectiveImpl.class);
 
+	IElementType UNKNOWN_DIRECTIVE = new ElementTypeAsPsiFactory("UNKNOWN_DIRECTIVE", CSharpMacroLanguage.INSTANCE,
+			CSharpPreprocessorUnknownDirectiveImpl.class);
+
+	// oldddddddddddddddddddddddddddddddddddddddddddddd
 	IElementType MACRO_IF = new ElementTypeAsPsiFactory("MACRO_IF", CSharpMacroLanguage.INSTANCE, CSharpMacroIfImpl.class);
 
 	IElementType MACRO_IF_CONDITION_BLOCK = new ElementTypeAsPsiFactory("MACRO_IF_CONDITION_BLOCK", CSharpMacroLanguage.INSTANCE,
 			CSharpMacroIfConditionBlockImpl.class);
 
-	IElementType MACRO_BLOCK_START = new ElementTypeAsPsiFactory("MACRO_BLOCK_START", CSharpMacroLanguage.INSTANCE,
-			CSharpMacroBlockStartImpl.class);
+	IElementType DEFINE_DIRECTIVE = new ElementTypeAsPsiFactory("DEFINE_DIRECTIVE", CSharpMacroLanguage.INSTANCE,
+			CSharpPreprocessorDefineDirectiveImpl.class);
+
+	IElementType UNDEF_DIRECTIVE = new ElementTypeAsPsiFactory("MACRO_UNDEF", CSharpMacroLanguage.INSTANCE,
+			CSharpPreprocessorDefineDirectiveImpl.class);
+
+	IElementType MACRO_BLOCK_START = new ElementTypeAsPsiFactory("MACRO_BLOCK_START", CSharpMacroLanguage.INSTANCE, CSharpMacroBlockStartImpl.class);
 
 	IElementType MACRO_BLOCK = new ElementTypeAsPsiFactory("MACRO_BLOCK", CSharpMacroLanguage.INSTANCE, CSharpMacroBlockImpl.class);
 

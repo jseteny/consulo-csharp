@@ -16,22 +16,19 @@
 
 package org.mustbe.consulo.csharp.lang;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mustbe.consulo.csharp.lang.psi.CSharpMacroRecursiveElementVisitor;
-import org.mustbe.consulo.csharp.lang.psi.CSharpMacroTokens;
-import org.mustbe.consulo.csharp.lang.psi.impl.source.CSharpMacroBlockImpl;
-import org.mustbe.consulo.csharp.lang.psi.impl.source.CSharpMacroBlockStartImpl;
-import org.mustbe.consulo.csharp.lang.psi.impl.source.CSharpMacroBlockStopImpl;
+import org.mustbe.consulo.csharp.lang.psi.impl.source.CSharpPreprocessorRegionDirectiveImpl;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.folding.FoldingBuilder;
 import com.intellij.lang.folding.FoldingDescriptor;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.templateLanguages.OuterLanguageElement;
 import lombok.val;
 
 /**
@@ -48,37 +45,37 @@ public class CSharpMacroFoldingBuilder implements FoldingBuilder
 
 		PsiElement psi = astNode.getPsi();
 
+		val open = new ArrayDeque<CSharpPreprocessorRegionDirectiveImpl>();
 		psi.accept(new CSharpMacroRecursiveElementVisitor()
 		{
 			@Override
-			public void visitMacroBlock(CSharpMacroBlockImpl block)
+			public void visitPreprocessorRegionDirective(CSharpPreprocessorRegionDirectiveImpl preprocessorDirective)
 			{
-				super.visitMacroBlock(block);
-
-				CSharpMacroBlockStartImpl startElement = block.getStartElement();
-				CSharpMacroBlockStopImpl stopElement = block.getStopElement();
-				if(startElement == null || stopElement == null)
+				if(preprocessorDirective.isOpen())
 				{
-					return;
+					String value = preprocessorDirective.getValue();
+					if(value == null)
+					{
+						return;
+					}
+					open.add(preprocessorDirective);
 				}
-
-				if(startElement.getKeywordElement().getNode().getElementType() != CSharpMacroTokens.REGION_KEYWORD)
+				else
 				{
-					return;
-				}
+					CSharpPreprocessorRegionDirectiveImpl regionDirective = open.pollLast();
+					if(regionDirective == null)
+					{
+						return;
+					}
 
-				PsiElement stopElementStopElement = stopElement.getStopElement();
-				if(stopElementStopElement == null)
-				{
-					return;
-				}
-
-				PsiElement startElementKeywordElement = startElement.getKeywordElement();
-				int textOffset = startElementKeywordElement.getTextOffset();
-				int textOffset1 = stopElementStopElement.getTextOffset();
-				if((textOffset1 - textOffset) > 0)
-				{
-					foldingList.add(new FoldingDescriptor(block, new TextRange(textOffset, textOffset1)));
+					PsiElement startElement = regionDirective.getStartElement();
+					int endOffset = preprocessorDirective.getTextRange().getEndOffset();
+					PsiElement endElement = preprocessorDirective.getEndElement();
+					if(endElement != null)
+					{
+						endOffset -= endElement.getTextLength();
+					}
+					foldingList.add(new FoldingDescriptor(regionDirective, new TextRange(startElement.getTextRange().getStartOffset(), endOffset)));
 				}
 			}
 		});
@@ -91,33 +88,11 @@ public class CSharpMacroFoldingBuilder implements FoldingBuilder
 	{
 		PsiElement psi = astNode.getPsi();
 
-
-		if(psi instanceof CSharpMacroBlockImpl)
+		if(psi instanceof CSharpPreprocessorRegionDirectiveImpl)
 		{
-			CSharpMacroBlockStartImpl startElement = ((CSharpMacroBlockImpl) psi).getStartElement();
-
-			if(startElement != null)
-			{
-				return getTextWithoutOuterElements(startElement);
-			}
-			return "##";
+			return ((CSharpPreprocessorRegionDirectiveImpl) psi).getValue();
 		}
 		return null;
-	}
-
-	private String getTextWithoutOuterElements(PsiElement element)
-	{
-		StringBuilder builder = new StringBuilder();
-		PsiElement it = element.getFirstChild();
-		while(it != null)
-		{
-			if(!(it instanceof OuterLanguageElement))
-			{
-				builder.append(it.getText());
-			}
-			it = it.getNextSibling();
-		}
-		return builder.toString().trim();
 	}
 
 	@Override

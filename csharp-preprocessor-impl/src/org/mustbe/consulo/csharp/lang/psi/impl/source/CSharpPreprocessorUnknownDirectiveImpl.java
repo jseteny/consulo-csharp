@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 must-be.org
+ * Copyright 2013-2015 must-be.org
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,26 @@
  * limitations under the License.
  */
 
-package org.mustbe.consulo.csharp.lang.psi;
+package org.mustbe.consulo.csharp.lang.psi.impl.source;
 
-import com.intellij.psi.PsiNameIdentifierOwner;
+import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.csharp.lang.psi.CSharpMacroElementVisitor;
+import com.intellij.lang.ASTNode;
 
 /**
  * @author VISTALL
- * @since 26.01.14
+ * @since 23.03.2015
  */
-public interface CSharpMacroDefine extends PsiNameIdentifierOwner
+public class CSharpPreprocessorUnknownDirectiveImpl extends CSharpPreprocessorDirectiveImpl
 {
-	boolean isUnDef();
+	public CSharpPreprocessorUnknownDirectiveImpl(@NotNull ASTNode node)
+	{
+		super(node);
+	}
+
+	@Override
+	public void accept(@NotNull CSharpMacroElementVisitor visitor)
+	{
+
+	}
 }
