@@ -14,38 +14,26 @@
  * limitations under the License.
  */
 
-package org.mustbe.consulo.csharp.lang.doc.validation;
+package org.mustbe.consulo.csharp.lang.psi.impl.source;
+
+import org.jetbrains.annotations.NotNull;
+import org.mustbe.consulo.csharp.lang.psi.CSharpElementVisitor;
+import com.intellij.lang.ASTNode;
 
 /**
  * @author VISTALL
- * @since 03.03.2015
+ * @since 27.03.2015
  */
-public class CSharpDocAttributeInfo
+public class CSharpDictionaryInitializerListImpl extends CSharpElementImpl
 {
-	public enum ValueType
+	public CSharpDictionaryInitializerListImpl(@NotNull ASTNode node)
 	{
-		REFERENCE,
-		PARAMETER,
-		TYPE_PARAMETER,
-		TEXT
+		super(node);
 	}
 
-	private final String myName;
-	private final ValueType myValueType;
-
-	public CSharpDocAttributeInfo(String name, ValueType valueType)
+	@Override
+	public void accept(@NotNull CSharpElementVisitor visitor)
 	{
-		myName = name;
-		myValueType = valueType;
-	}
-
-	public ValueType getValueType()
-	{
-		return myValueType;
-	}
-
-	public String getName()
-	{
-		return myName;
+		visitor.visitDictionaryInitializerList(this);
 	}
 }

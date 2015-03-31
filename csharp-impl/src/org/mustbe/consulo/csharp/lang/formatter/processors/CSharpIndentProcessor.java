@@ -71,6 +71,10 @@ public class CSharpIndentProcessor implements CSharpTokens, CSharpElements
 			}
 			return Indent.getNoneIndent();
 		}
+		else if(elementType == DICTIONARY_INITIALIZER)
+		{
+			return Indent.getNormalIndent();
+		}
 		else if(CommentUtilCore.isComment(myNode))
 		{
 			return Indent.getNormalIndent();
@@ -134,6 +138,10 @@ public class CSharpIndentProcessor implements CSharpTokens, CSharpElements
 	{
 		val elementType = myNode.getElementType();
 		if(elementType == CSharpStubElements.FILE)
+		{
+			return Indent.getNoneIndent();
+		}
+		else if(elementType == CSharpElements.TRY_STATEMENT)
 		{
 			return Indent.getNoneIndent();
 		}

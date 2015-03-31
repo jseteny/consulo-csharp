@@ -74,6 +74,7 @@ public class SharedParsingHelpers implements CSharpTokenSets, CSharpTokens, CSha
 	public static final int BRACKET_RETURN_BEFORE = 1 << 3;
 	public static final int WITHOUT_NULLABLE = 1 << 4;
 	public static final int ALLOW_EMPTY_TYPE_ARGUMENTS = 1 << 5;
+	public static final int INSIDE_DOC = 1 << 6;
 
 	public static class TypeInfo
 	{
@@ -83,6 +84,33 @@ public class SharedParsingHelpers implements CSharpTokenSets, CSharpTokens, CSha
 		public boolean isArray;
 		public boolean isMultiArray;
 		public PsiBuilder.Marker marker;
+	}
+
+	protected static void reportErrorUntil(CSharpBuilderWrapper builder, String error, TokenSet originalSet, TokenSet softSet)
+	{
+		while(!builder.eof())
+		{
+			if(originalSet.contains(builder.getTokenType()))
+			{
+				break;
+			}
+
+			if(builder.getTokenType() == IDENTIFIER)
+			{
+				builder.enableSoftKeywords(softSet);
+				IElementType tokenType = builder.getTokenType();
+				builder.disableSoftKeywords(softSet);
+				if(softSet.contains(tokenType))
+				{
+					// remap
+					builder.remapBackIfSoft();
+					break;
+				}
+			}
+			PsiBuilder.Marker mark = builder.mark();
+			builder.advanceLexer();
+			mark.error(error);
+		}
 	}
 
 	protected static void done(PsiBuilder.Marker marker, IElementType elementType)

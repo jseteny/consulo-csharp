@@ -20,6 +20,8 @@ import org.jetbrains.annotations.NotNull;
 import org.mustbe.consulo.csharp.lang.parser.CSharpBuilderWrapper;
 import org.mustbe.consulo.csharp.lang.parser.SharedParsingHelpers;
 import org.mustbe.consulo.csharp.lang.parser.UsingStatementParsing;
+import org.mustbe.consulo.csharp.lang.parser.exp.ExpressionParsing;
+import org.mustbe.consulo.csharp.lang.psi.CSharpStubElements;
 import org.mustbe.consulo.csharp.lang.psi.CSharpTokenSets;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.openapi.util.Pair;
@@ -39,13 +41,58 @@ public class DeclarationParsing extends SharedParsingHelpers
 
 	private static final TokenSet NAME_TOKENS = TokenSet.create(THIS_KEYWORD, IDENTIFIER);
 
-	public static boolean parse(@NotNull CSharpBuilderWrapper builder, boolean inner)
+	public static void parseAll(@NotNull CSharpBuilderWrapper builder, boolean root, boolean isEnum)
 	{
-		if(inner && builder.getTokenType() == RBRACE)
+		if(isEnum)
 		{
-			return false;
-		}
+			IElementType prevToken;
+			while(!builder.eof())
+			{
+				prevToken = builder.getTokenType();
 
+				parseEnumConstant(builder);
+
+				if(builder.getTokenType() == COMMA)
+				{
+					if(prevToken == COMMA)
+					{
+						builder.error("Name expected");
+					}
+					builder.advanceLexer();
+				}
+				else if(builder.getTokenType() == RBRACE)
+				{
+					break;
+				}
+				else
+				{
+					PsiBuilder.Marker errorMarker = builder.mark();
+					builder.advanceLexer();
+					errorMarker.error("Expected comma");
+				}
+			}
+		}
+		else
+		{
+			while(!builder.eof())
+			{
+				if(!root && builder.getTokenType() == RBRACE)
+				{
+					return;
+				}
+
+				if(!parse(builder, root))
+				{
+					PsiBuilder.Marker mark = builder.mark();
+					builder.advanceLexer();
+					mark.error("Unexpected token");
+				}
+			}
+		}
+	}
+
+	private static boolean parse(@NotNull CSharpBuilderWrapper builder, boolean root)
+	{
 		PsiBuilder.Marker marker = builder.mark();
 
 		Pair<PsiBuilder.Marker, Boolean> modifierListPair = parseWithSoftElements(new NotNullFunction<CSharpBuilderWrapper, Pair<PsiBuilder.Marker,
@@ -112,7 +159,7 @@ public class DeclarationParsing extends SharedParsingHelpers
 				{
 					if(!modifierListPair.getSecond())
 					{
-						if(!inner)
+						if(root)
 						{
 							marker.done(DUMMY_DECLARATION);
 							return true;
@@ -136,9 +183,11 @@ public class DeclarationParsing extends SharedParsingHelpers
 					TypeInfo implementType = parseImplementType(builder);
 					if(implementType == null)
 					{
-						builder.error("Expected identifier");
-						done(marker, FIELD_DECLARATION);
-						return false;
+						builder.error("Name is expected");
+
+						// if we dont have name but we have lbracket - parse as index method
+						parseAfterName(builder, marker, builder.getTokenType() == LBRACKET ? THIS_KEYWORD : null);
+						return true;
 					}
 
 					IElementType prevToken = null;
@@ -162,22 +211,82 @@ public class DeclarationParsing extends SharedParsingHelpers
 						expect(builder, NAME_TOKENS, "Name is expected");
 					}
 
-					if(prevToken == THIS_KEYWORD)
-					{
-						FieldOrPropertyParsing.parseArrayAfterThis(builder, marker);
-					}
-					else if(builder.getTokenType() == LPAR || builder.getTokenType() == LT) // MODIFIER_LIST TYPE IDENTIFIER LPAR -> METHOD
-					{
-						MethodParsing.parseMethodStartAfterName(builder, marker, MethodParsing.Target.METHOD);
-					}
-					else
-					{
-						FieldOrPropertyParsing.parseFieldOrPropertyAfterName(builder, marker, typeInfo);
-					}
+					parseAfterName(builder, marker, prevToken);
 				}
 			}
 		}
 		return true;
+	}
+
+	private static boolean parseEnumConstant(CSharpBuilderWrapper builder)
+	{
+		if(builder.getTokenType() == RBRACE)
+		{
+			return true;
+		}
+		PsiBuilder.Marker mark = builder.mark();
+
+		boolean nameExpected = false;
+		if(builder.getTokenType() == LBRACKET)
+		{
+			PsiBuilder.Marker modMark = builder.mark();
+			parseAttributeList(builder, STUB_SUPPORT);
+			modMark.done(CSharpStubElements.MODIFIER_LIST);
+
+			nameExpected = true;
+		}
+
+		if(builder.getTokenType() == IDENTIFIER)
+		{
+			if(!nameExpected)
+			{
+				emptyElement(builder, CSharpStubElements.MODIFIER_LIST);
+			}
+
+			builder.advanceLexer();
+
+			if(builder.getTokenType() == EQ)
+			{
+				builder.advanceLexer();
+
+				if(ExpressionParsing.parse(builder) == null)
+				{
+					builder.error("Expression expected");
+				}
+			}
+		}
+		else
+		{
+			if(builder.getTokenType() == COMMA || builder.getTokenType() == RBRACE)
+			{
+				if(nameExpected)
+				{
+					builder.error("Name expected");
+				}
+
+				done(mark, ENUM_CONSTANT_DECLARATION);
+				return false;
+			}
+		}
+
+		done(mark, ENUM_CONSTANT_DECLARATION);
+		return true;
+	}
+
+	private static void parseAfterName(CSharpBuilderWrapper builder, PsiBuilder.Marker marker, IElementType prevToken)
+	{
+		if(prevToken == THIS_KEYWORD)
+		{
+			FieldOrPropertyParsing.parseArrayAfterThis(builder, marker);
+		}
+		else if(builder.getTokenType() == LPAR || builder.getTokenType() == LT) // MODIFIER_LIST TYPE IDENTIFIER LPAR -> METHOD
+		{
+			MethodParsing.parseMethodStartAfterName(builder, marker, MethodParsing.Target.METHOD);
+		}
+		else
+		{
+			FieldOrPropertyParsing.parseFieldOrPropertyAfterName(builder, marker);
+		}
 	}
 
 	private static TypeInfo parseImplementType(CSharpBuilderWrapper builder)
